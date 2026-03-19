@@ -1,6 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-react';
-import { NavFooter } from '@/components/nav-footer';
+import { BookOpen, Folder, LayoutGrid, GraduationCap, Users, Book, ListCheck, Building, ChevronsUpDown } from 'lucide-react';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import {
@@ -12,28 +11,50 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import type { NavItem } from '@/types';
-import AppLogo from './app-logo';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { dashboard } from '@/routes';
+import type { NavItem } from '@/types';
 
-const mainNavItems: NavItem[] = [
+const classroomItems: NavItem[] = [
     {
-        title: 'Dashboard',
-        href: dashboard(),
-        icon: LayoutGrid,
+        title: 'Teachers',
+        href: '/teachers',
+        icon: GraduationCap,
+    },
+    {
+        title: 'Students',
+        href: '/students',
+        icon: Users,
+    },
+    {
+        title: 'Courses',
+        href: '/courses',
+        icon: Book,
+    },
+    {
+        title: 'Enrollments',
+        href: '/enrollments',
+        icon: ListCheck,
     },
 ];
 
-const footerNavItems: NavItem[] = [
+const institutionItems: NavItem[] = [
     {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
+        title: 'Dashboard',
+        href: '/dashboard',
+        icon: LayoutGrid,
     },
     {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
+        title: 'School Data',
+        href: '/institution',
+        icon: Building,
     },
 ];
 
@@ -43,21 +64,59 @@ export function AppSidebar() {
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton size="lg" asChild>
-                            <Link href={dashboard()} prefetch>
-                                <AppLogo />
-                            </Link>
-                        </SidebarMenuButton>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <SidebarMenuButton size="lg" className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
+                                    <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-blue-600 text-sidebar-primary-foreground">
+                                        <Building className="size-4 text-white" />
+                                    </div>
+                                    <div className="grid flex-1 text-left text-sm leading-tight">
+                                        <span className="truncate font-semibold font-['Inter'] tracking-tight">MultiCampus HS</span>
+                                        <span className="truncate text-xs">Primary Branch</span>
+                                    </div>
+                                    <ChevronsUpDown className="ml-auto" />
+                                </SidebarMenuButton>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent
+                                className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+                                align="start"
+                                side="bottom"
+                                sideOffset={4}
+                            >
+                                <DropdownMenuLabel className="text-xs text-muted-foreground">
+                                    Tenants
+                                </DropdownMenuLabel>
+                                <DropdownMenuItem className="gap-2 p-2 cursor-pointer">
+                                    <div className="flex size-6 items-center justify-center rounded-md border bg-background">
+                                        <Building className="size-4" />
+                                    </div>
+                                    MultiCampus High School
+                                </DropdownMenuItem>
+                                <DropdownMenuItem className="gap-2 p-2 cursor-pointer">
+                                    <div className="flex size-6 items-center justify-center rounded-md border bg-background">
+                                        <Building className="size-4" />
+                                    </div>
+                                    MultiCampus Elementary
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem className="gap-2 p-2 cursor-pointer text-blue-600">
+                                    <div className="flex size-6 items-center justify-center rounded-md border bg-background">
+                                        <span className="text-lg font-bold">+</span>
+                                    </div>
+                                    Register New School
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                <NavMain items={classroomItems} label="Classroom" />
+                <NavMain items={institutionItems} label="Institution" />
             </SidebarContent>
 
             <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

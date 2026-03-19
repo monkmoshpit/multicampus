@@ -12,8 +12,8 @@ import { store } from '@/routes/register';
 export default function Register() {
     return (
         <AuthLayout
-            title="Create an account"
-            description="Enter your details below to create your account"
+            title="Create your account"
+            description="Get started with MultiCampus today"
         >
             <Head title="Register" />
             <Form
@@ -44,12 +44,25 @@ export default function Register() {
                             </div>
 
                             <div className="grid gap-2">
+                                <Label htmlFor="school_name">School name</Label>
+                                <Input
+                                    id="school_name"
+                                    type="text"
+                                    required
+                                    tabIndex={2}
+                                    name="school_name"
+                                    placeholder="Example: Lakeside High School"
+                                />
+                                <InputError message={errors.school_name} />
+                            </div>
+
+                            <div className="grid gap-2">
                                 <Label htmlFor="email">Email address</Label>
                                 <Input
                                     id="email"
                                     type="email"
                                     required
-                                    tabIndex={2}
+                                    tabIndex={3}
                                     autoComplete="email"
                                     name="email"
                                     placeholder="email@example.com"

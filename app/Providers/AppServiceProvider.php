@@ -5,6 +5,12 @@ namespace App\Providers;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use App\Models\Course;
+use App\Models\Enrollment;
+use App\Models\Student;
+use App\Models\Subject;
+use App\Models\Teacher;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -24,6 +30,14 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+
+        // Ensure route model binding is tenant-aware. This prevents cross-tenant data access
+        // even if a controller forgets to scope queries by tenant.
+        Route::bind('student', fn ($value) => Student::forTenant()->findOrFail($value));
+        Route::bind('teacher', fn ($value) => Teacher::forTenant()->findOrFail($value));
+        Route::bind('course', fn ($value) => Course::forTenant()->findOrFail($value));
+        Route::bind('enrollment', fn ($value) => Enrollment::forTenant()->findOrFail($value));
+        Route::bind('subject', fn ($value) => Subject::forTenant()->findOrFail($value));
     }
 
     /**
