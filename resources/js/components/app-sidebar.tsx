@@ -1,5 +1,7 @@
-import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, GraduationCap, Users, Book, ListCheck, Building, ChevronsUpDown } from 'lucide-react';
+import { Link, usePage } from '@inertiajs/react';
+
+import { BookOpen, Folder, LayoutGrid, GraduationCap, Users, Book, ListCheck, Building } from 'lucide-react';
+
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import {
@@ -23,6 +25,11 @@ import { dashboard } from '@/routes';
 import type { NavItem } from '@/types';
 
 const classroomItems: NavItem[] = [
+    {
+        title: 'Classrooms',
+        href: '/classrooms',
+        icon: Folder,
+    },
     {
         title: 'Teachers',
         href: '/teachers',
@@ -59,62 +66,66 @@ const institutionItems: NavItem[] = [
 ];
 
 export function AppSidebar() {
+    const { auth } = usePage().props as any;
+    const userRole = auth.user?.role;
+
+    const filteredClassroomItems = classroomItems.filter((item) => {
+        if (userRole === 'student') {
+            return ['Classrooms'].includes(item.title);
+        }
+        if (userRole === 'teacher') {
+            return ['Classrooms', 'Students', 'Courses'].includes(item.title);
+        }
+        return true; // Tenant sees everything
+    }).map(item => {
+        if (userRole === 'teacher' || userRole === 'student') {
+            if (item.title === 'Classrooms') return { ...item, title: 'My Classes' };
+            if (item.title === 'Students') return { ...item, title: 'My Students' };
+            if (item.title === 'Courses') return { ...item, title: 'My Courses' };
+        }
+        return item;
+    });
+
+    if (userRole === 'student') {
+        filteredClassroomItems.push(
+            { title: 'My Grades', href: '#', icon: BookOpen },
+            { title: 'My Profile', href: '/settings/profile', icon: Users }
+        );
+    }
+
+    const filteredInstitutionItems = institutionItems.filter((item) => {
+        if (userRole === 'student' || userRole === 'teacher') {
+            return item.title === 'Dashboard';
+        }
+        return true; // Tenant sees everything
+    });
+
+
     return (
+
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <SidebarMenuButton size="lg" className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
-                                    <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-blue-600 text-sidebar-primary-foreground">
-                                        <Building className="size-4 text-white" />
-                                    </div>
-                                    <div className="grid flex-1 text-left text-sm leading-tight">
-                                        <span className="truncate font-semibold font-['Inter'] tracking-tight">MultiCampus HS</span>
-                                        <span className="truncate text-xs">Primary Branch</span>
-                                    </div>
-                                    <ChevronsUpDown className="ml-auto" />
-                                </SidebarMenuButton>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent
-                                className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-                                align="start"
-                                side="bottom"
-                                sideOffset={4}
-                            >
-                                <DropdownMenuLabel className="text-xs text-muted-foreground">
-                                    Tenants
-                                </DropdownMenuLabel>
-                                <DropdownMenuItem className="gap-2 p-2 cursor-pointer">
-                                    <div className="flex size-6 items-center justify-center rounded-md border bg-background">
-                                        <Building className="size-4" />
-                                    </div>
-                                    MultiCampus High School
-                                </DropdownMenuItem>
-                                <DropdownMenuItem className="gap-2 p-2 cursor-pointer">
-                                    <div className="flex size-6 items-center justify-center rounded-md border bg-background">
-                                        <Building className="size-4" />
-                                    </div>
-                                    MultiCampus Elementary
-                                </DropdownMenuItem>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem className="gap-2 p-2 cursor-pointer text-blue-600">
-                                    <div className="flex size-6 items-center justify-center rounded-md border bg-background">
-                                        <span className="text-lg font-bold">+</span>
-                                    </div>
-                                    Register New School
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                        <SidebarMenuButton size="lg" className="group cursor-default hover:bg-transparent">
+                            <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-gradient-to-br from-green-600 via-green-500 to-orange-500 text-white shadow-sm ring-1 ring-orange-500/20">
+                                <Building className="size-4" />
+                            </div>
+                            <div className="grid flex-1 text-left text-sm leading-tight">
+                                <span className="truncate font-semibold font-['Inter'] tracking-tight text-lg">MultiCampus</span>
+                                <span className="truncate text-xs opacity-70">Academic Management</span>
+                            </div>
+                        </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarHeader>
 
+
             <SidebarContent>
-                <NavMain items={classroomItems} label="Classroom" />
-                <NavMain items={institutionItems} label="Institution" />
+                <NavMain items={filteredClassroomItems} label="Classroom" />
+                <NavMain items={filteredInstitutionItems} label="Institution" />
             </SidebarContent>
+
 
             <SidebarFooter>
                 <NavUser />

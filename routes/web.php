@@ -9,6 +9,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\InstitutionController;
+use App\Http\Controllers\ClassroomController;
 
 Route::get('/', function () {
     return Inertia::render('welcome', [
@@ -41,6 +42,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/enrollments/{enrollment}', [EnrollmentController::class, 'destroy'])->name('enrollments.destroy');
 
     Route::get('/institution', [InstitutionController::class, 'index'])->name('institution.index');
+
+    Route::get('/classrooms', [ClassroomController::class, 'index'])->name('classrooms.index');
+    Route::post('/classrooms', [ClassroomController::class, 'store'])->name('classrooms.store');
+    Route::put('/classrooms/{classroom}', [ClassroomController::class, 'update'])->name('classrooms.update');
+    Route::delete('/classrooms/{classroom}', [ClassroomController::class, 'destroy'])->name('classrooms.destroy');
 });
 
 require __DIR__.'/settings.php';

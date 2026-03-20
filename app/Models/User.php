@@ -9,12 +9,35 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use App\Models\Tenant;
+use App\Models\Teacher;
+use App\Models\Student;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, TwoFactorAuthenticatable;
     use HasUlids;
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+
+    /**
+     * The data type of the primary key ID.
+     *
+     * @var string
+     */
+    protected $keyType = 'string';
+
+    /**
+     * Role constants.
+     */
+    const ROLE_TENANT = 'tenant';
+    const ROLE_TEACHER = 'teacher';
+    const ROLE_STUDENT = 'student';
 
     /**
      * The attributes that are mass assignable.
@@ -26,6 +49,7 @@ class User extends Authenticatable
         'email',
         'password',
         'tenant_id',
+        'role',
     ];
 
     /**
@@ -34,6 +58,40 @@ class User extends Authenticatable
     public function tenant()
     {
         return $this->belongsTo(Tenant::class);
+    }
+
+    /**
+     * Teacher relationship.
+     */
+    public function teacher()
+    {
+        return $this->hasOne(Teacher::class);
+    }
+
+    /**
+     * Student relationship.
+     */
+    public function student()
+    {
+        return $this->hasOne(Student::class);
+    }
+
+    /**
+     * Role checks.
+     */
+    public function isTenant(): bool
+    {
+        return $this->role === self::ROLE_TENANT;
+    }
+
+    public function isTeacher(): bool
+    {
+        return $this->role === self::ROLE_TEACHER;
+    }
+
+    public function isStudent(): bool
+    {
+        return $this->role === self::ROLE_STUDENT;
     }
 
     /**

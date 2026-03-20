@@ -1,7 +1,8 @@
 export type User = {
-    id: number;
+    id: string; // Changed to string as it is a ULID
     name: string;
     email: string;
+    role: 'tenant' | 'teacher' | 'student';
     avatar?: string;
     email_verified_at: string | null;
     two_factor_enabled?: boolean;
@@ -9,6 +10,7 @@ export type User = {
     updated_at: string;
     [key: string]: unknown;
 };
+
 
 export type Auth = {
     user: User;

@@ -10,6 +10,7 @@ use App\Models\Enrollment;
 use App\Models\Student;
 use App\Models\Subject;
 use App\Models\Teacher;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
@@ -25,10 +26,12 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * Bootstrap any application services.
+     * Initialize any application services.
      */
     public function boot(): void
     {
+        Paginator::useTailwind();
+
         $this->configureDefaults();
 
         // Ensure route model binding is tenant-aware. This prevents cross-tenant data access

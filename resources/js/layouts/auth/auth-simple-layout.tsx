@@ -2,91 +2,168 @@ import { Link } from '@inertiajs/react';
 import AppLogoIcon from '@/components/app-logo-icon';
 import type { AuthLayoutProps } from '@/types';
 import { home } from '@/routes';
+import { useState, useEffect, ReactNode } from 'react';
+import { GraduationCap, Users, Building } from 'lucide-react';
 
-export default function AuthSimpleLayout({
-    children,
-    title,
-    description,
-}: AuthLayoutProps) {
+type Role = 'teacher' | 'student' | 'tenant';
+
+const themes = {
+    teacher: {
+        bg: 'from-green-600 via-emerald-700 to-green-900',
+        text: 'Teacher',
+        hero: 'Empowering educators with precision tools.',
+        icon: GraduationCap,
+    },
+    student: {
+        bg: 'from-orange-600 via-orange-500 to-amber-700',
+        text: 'Student',
+        hero: 'Your journey to excellence starts here.',
+        icon: Users,
+    },
+    tenant: {
+        bg: 'from-blue-600 via-sky-700 to-blue-900',
+        text: 'Administrator',
+        hero: 'Manage your institution at scale.',
+        icon: Building,
+    }
+};
+
+function Typewriter({ text, duration = 800, delay = 0, onComplete }: { text: string; duration?: number; delay?: number; onComplete?: () => void }) {
+    const [displayedText, setDisplayedText] = useState('');
+    const [isComplete, setIsComplete] = useState(false);
+    
+    useEffect(() => {
+        setDisplayedText('');
+        setIsComplete(false);
+        const speed = text.length > 0 ? duration / text.length : 0;
+        
+        const startTimeout = setTimeout(() => {
+            let i = 0;
+            const timer = setInterval(() => {
+                setDisplayedText(text.slice(0, i + 1));
+                i++;
+                if (i >= text.length) {
+                    clearInterval(timer);
+                    setIsComplete(true);
+                    onComplete?.();
+                }
+            }, speed);
+            return () => clearInterval(timer);
+        }, delay);
+
+        return () => clearTimeout(startTimeout);
+    }, [text, duration, delay]);
+
+    return <span>{displayedText}{!isComplete && <span className="animate-pulse">|</span>}</span>;
+}
+
+interface AuthContentProps {
+    role: Role;
+    title?: string;
+    description?: string;
+    children: ReactNode;
+    onRoleChange: (role: Role) => void;
+    currentRole: Role;
+    isFlooding: boolean;
+    showTypewriter?: boolean;
+    onTypewriterComplete?: () => void;
+}
+
+function AuthContent({ role, title, description, children, onRoleChange, currentRole, isFlooding, showTypewriter = false, onTypewriterComplete }: AuthContentProps) {
+    const theme = themes[role];
+    
     return (
-        <div className="flex min-h-svh">
+        <div className={`flex min-h-svh theme-${role} bg-background transition-none`}>
             {/* Left side - Branding */}
-            <div className="hidden flex-1 flex-col justify-between bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-900 p-8 text-white lg:flex">
+            <div className={`hidden flex-1 flex-col justify-between bg-gradient-to-br ${theme.bg} p-12 text-white lg:flex transition-all duration-500`}>
                 <div>
-                    <div className="flex items-center gap-3">
-                        <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-white/20 backdrop-blur-sm">
-                            <AppLogoIcon className="size-6 fill-white" />
-                        </div>
-                        <span className="text-3xl font-bold tracking-tight">MultiCampus</span>
+                        <Link href={home()} className="flex items-center gap-4 hover:opacity-80 transition-opacity">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20 backdrop-blur-md shadow-xl ring-1 ring-white/30">
+                                <AppLogoIcon className="size-7 fill-white" />
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="text-2xl font-black tracking-tighter uppercase leading-none">MULTICAMPUS</span>
+                                <span className="text-[10px] font-bold tracking-[0.2em] uppercase opacity-80 mt-1">
+                                    for {showTypewriter ? <Typewriter text={theme.text + 's'} duration={600} /> : `${theme.text}s`}
+                                </span>
+                            </div>
+                        </Link>
+                </div>
+
+                <div className="space-y-8">
+                    <div className="inline-flex items-center rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium backdrop-blur-sm ring-1 ring-white/20 transition-all duration-300">
+                        <theme.icon className="mr-2 h-4 w-4" />
+                        Portal for {theme.text}s
+                    </div>
+                    <h2 className="text-6xl font-extrabold leading-[1.1] tracking-tight transition-all duration-300 min-h-[140px]">
+                        {showTypewriter ? <Typewriter text={theme.hero} duration={700} delay={100} onComplete={onTypewriterComplete} /> : theme.hero}
+                    </h2>
+                    <p className="max-w-md text-xl font-medium opacity-90 leading-relaxed transition-all duration-300">
+                        A seamless experience tailored specifically for your role in the educational ecosystem.
+                    </p>
+                </div>
+
+                <div className="flex items-center justify-between border-t border-white/10 pt-8 mt-12">
+                    <p className="text-sm font-medium opacity-60 uppercase tracking-widest">© 2026 MULTICAMPUS GLOBAL</p>
+                    <div className="flex gap-6 opacity-60">
+                        <span className="text-sm cursor-help hover:opacity-100 transition-opacity underline decoration-white/30 underline-offset-4 uppercase">Privacy</span>
+                        <span className="text-sm cursor-help hover:opacity-100 transition-opacity underline decoration-white/30 underline-offset-4 uppercase">Terms</span>
                     </div>
                 </div>
-
-                <div className="space-y-6">
-                    <h2 className="text-4xl font-bold leading-tight">
-                        Manage your school with ease
-                    </h2>
-                    <p className="text-lg text-blue-100">
-                        A comprehensive platform to organize students, teachers, courses, and enrollments efficiently.
-                    </p>
-                    <ul className="space-y-3 text-sm text-blue-100">
-                        <li className="flex items-center gap-3">
-                            <span className="flex h-2 w-2 rounded-full bg-white" />
-                            Centralized school data management
-                        </li>
-                        <li className="flex items-center gap-3">
-                            <span className="flex h-2 w-2 rounded-full bg-white" />
-                            Real-time student and teacher tracking
-                        </li>
-                        <li className="flex items-center gap-3">
-                            <span className="flex h-2 w-2 rounded-full bg-white" />
-                            Complete course and enrollment system
-                        </li>
-                        <li className="flex items-center gap-3">
-                            <span className="flex h-2 w-2 rounded-full bg-white" />
-                            Secure multi-tenant architecture
-                        </li>
-                    </ul>
-                </div>
-
-                <p className="text-xs text-blue-200">© 2026 MultiCampus. All rights reserved.</p>
             </div>
 
             {/* Right side - Form */}
-            <div className="flex flex-1 flex-col items-center justify-center gap-6 bg-gradient-to-b from-slate-50 to-slate-100 p-6 dark:from-slate-950 dark:to-slate-900 md:p-10">
+            <div className="relative flex flex-1 flex-col items-center justify-center gap-8 bg-background p-6 md:p-12 transition-none">
                 <div className="w-full max-w-sm">
-                    <div className="flex flex-col gap-8">
-                        {/* Mobile logo */}
-                        <div className="flex flex-col items-center gap-4 lg:hidden">
-                            <Link
-                                href={home()}
-                                className="flex flex-col items-center gap-2"
+                    {/* Role Switcher Slider */}
+                    <div className="mb-10 flex items-center justify-center p-1 rounded-2xl bg-muted/50 border border-border/50 backdrop-blur-sm shadow-inner overflow-hidden">
+                        {(['teacher', 'student', 'tenant'] as const).map((r) => (
+                            <button
+                                key={r}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    onRoleChange(r);
+                                }}
+                                className={`group relative flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs font-bold transition-all duration-300 ${
+                                    currentRole === r 
+                                    ? `bg-white dark:bg-zinc-800 text-primary shadow-lg ring-1 ring-black/5 dark:ring-white/10 scale-[1.02]` 
+                                    : 'text-muted-foreground hover:text-foreground'
+                                }`}
+                                disabled={isFlooding}
                             >
-                                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 shadow-lg">
-                                    <AppLogoIcon className="size-7 fill-white" />
-                                </div>
-                                <span className="text-2xl font-bold text-slate-900 dark:text-white">MultiCampus</span>
-                            </Link>
+                                {r === 'teacher' && <GraduationCap className={`h-3.5 w-3.5 ${currentRole === r ? 'text-primary' : ''}`} />}
+                                {r === 'student' && <Users className={`h-3.5 w-3.5 ${currentRole === r ? 'text-primary' : ''}`} />}
+                                {r === 'tenant' && <Building className={`h-3.5 w-3.5 ${currentRole === r ? 'text-primary' : ''}`} />}
+                                <span className="uppercase tracking-widest">{r}</span>
+                                
+                                {currentRole === r && (
+                                    <div className="absolute inset-x-0 bottom-0 h-0.5 bg-primary/20 transition-all duration-300" />
+                                )}
+                            </button>
+                        ))}
+                    </div>
 
-                            <div className="space-y-2 text-center">
-                                <h1 className="text-xl font-semibold text-slate-900 dark:text-white">{title}</h1>
-                                <p className="text-sm text-slate-600 dark:text-slate-400">
-                                    {description}
-                                </p>
-                            </div>
+                    <div className="flex flex-col gap-10">
+                        {/* Mobile logo */}
+                        <div className="flex flex-col items-center gap-6 lg:hidden">
+                            <Link href={home()} className="flex flex-col items-center gap-3">
+                                <div className={`flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${theme.bg} shadow-2xl transition-all duration-300`}>
+                                    <AppLogoIcon className="size-8 fill-white" />
+                                </div>
+                                <span className="text-3xl font-black tracking-tighter text-foreground uppercase">MULTICAMPUS</span>
+                            </Link>
                         </div>
 
-                        {/* Desktop title */}
-                        <div className="hidden flex-col items-center gap-3 lg:flex">
-                            <div className="space-y-2 text-center">
-                                <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">{title}</h1>
-                                <p className="text-sm text-slate-600 dark:text-slate-400">
-                                    {description}
-                                </p>
-                            </div>
+                        <div className="space-y-3 text-center lg:text-left transition-all duration-300">
+                            <h1 className="text-3xl font-bold tracking-tight text-foreground">{title}</h1>
+                            <p className="text-base text-muted-foreground leading-relaxed italic">
+                                "{theme.hero}"
+                            </p>
                         </div>
 
                         {/* Form Container */}
-                        <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-lg dark:border-slate-700 dark:bg-slate-800">
+                        <div className="rounded-3xl border border-border/60 bg-card/50 p-8 shadow-2xl backdrop-blur-sm ring-1 ring-black/[0.02]">
                             {children}
                         </div>
                     </div>
@@ -95,3 +172,93 @@ export default function AuthSimpleLayout({
         </div>
     );
 }
+
+export default function AuthSimpleLayout({
+    children,
+    title,
+    description,
+}: AuthLayoutProps) {
+    const queryParams = new URLSearchParams(window.location.search);
+    const initialRole = (queryParams.get('role') as Role) || 'tenant';
+    
+    const [activeRole, setActiveRole] = useState<Role>(initialRole);
+    const [nextRole, setNextRole] = useState<Role | null>(null);
+    const [isFlooding, setIsFlooding] = useState(false);
+    const [isFadingOut, setIsFadingOut] = useState(false);
+
+    // Initial theme setup
+    useEffect(() => {
+        const root = document.documentElement;
+        root.classList.remove('theme-teacher', 'theme-student', 'theme-tenant');
+        root.classList.add(`theme-${initialRole}`);
+    }, []);
+
+    const handleRoleChange = (role: Role) => {
+        if (role === activeRole || isFlooding) return;
+        
+        setNextRole(role);
+        setIsFlooding(true);
+        setIsFadingOut(false);
+
+        // Stage 1: Wash animation (ink flood) runs for 800ms
+        setTimeout(() => {
+            const root = document.documentElement;
+            
+            // Stage 2: Hand-off
+            // 1. Update the base role AND global theme while still covered by overlay
+            setActiveRole(role);
+            root.classList.remove('theme-teacher', 'theme-student', 'theme-tenant');
+            root.classList.add(`theme-${role}`);
+            
+            // 2. Wait for React to paint the base layer
+            setTimeout(() => {
+                // Stage 3: Smooth dissolve
+                setIsFadingOut(true);
+                
+                // Final cleanup
+                setTimeout(() => {
+                    setIsFlooding(false);
+                    setIsFadingOut(false);
+                    setNextRole(null);
+                }, 300); // Overlay fade duration
+            }, 100);
+        }, 800);
+    };
+
+    return (
+        <div className="relative min-h-svh w-full overflow-hidden bg-background">
+            {/* The Base Layer - Stays behind the wash */}
+            <div className={`theme-${activeRole}`}>
+                <AuthContent 
+                    role={activeRole} 
+                    title={title} 
+                    description={description} 
+                    onRoleChange={handleRoleChange}
+                    currentRole={isFlooding && nextRole ? nextRole : activeRole}
+                    isFlooding={isFlooding}
+                >
+                    {children}
+                </AuthContent>
+            </div>
+
+            {/* The Ink Wash Overlay - Floods in with next theme */}
+            {isFlooding && nextRole && (
+                <div className={`theme-${nextRole} absolute inset-0 z-[100] pointer-events-none animate-ink-flood overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.3)] transition-opacity duration-300 ${isFadingOut ? 'opacity-0' : 'opacity-100'}`}>
+                    <AuthContent 
+                        role={nextRole} 
+                        title={title} 
+                        description={description} 
+                        onRoleChange={() => {}} 
+                        currentRole={nextRole}
+                        isFlooding={isFlooding}
+                        showTypewriter={true}
+                    >
+                        {children}
+                    </AuthContent>
+                </div>
+            )}
+        </div>
+    );
+}
+
+

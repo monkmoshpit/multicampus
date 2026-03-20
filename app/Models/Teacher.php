@@ -21,9 +21,15 @@ class Teacher extends Model
         'first_name',
         'last_name',
         'email',
+        'user_id',
     ];
 
     // Relationships
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function tenant()
     {
         return $this->belongsTo(Tenant::class);
@@ -35,5 +41,10 @@ class Teacher extends Model
             Subject::class,
             'subject_teacher'
         );
+    }
+
+    public function classrooms()
+    {
+        return $this->hasMany(Classroom::class);
     }
 }

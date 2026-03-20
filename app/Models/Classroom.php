@@ -7,36 +7,40 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 
-class Student extends Model
+class Classroom extends Model
 {
     use HasFactory;
     use HasTenant;
-
+    
     // Ulid as primary key
     use HasUlids;
     public $incrementing = false;
     protected $keyType = 'string';
 
     protected $fillable = [
-        'first_name',
-        'last_name',
-        'grade',
-        'user_id',
+        'name',
+        'teacher_id',
+        'course_id',
     ];
 
     // Relationships
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
     public function tenant()
     {
         return $this->belongsTo(Tenant::class);
     }
 
-    public function classrooms()
+    public function teacher()
     {
-        return $this->belongsToMany(Classroom::class, 'classroom_student');
+        return $this->belongsTo(Teacher::class);
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
+    }
+
+    public function students()
+    {
+        return $this->belongsToMany(Student::class, 'classroom_student');
     }
 }

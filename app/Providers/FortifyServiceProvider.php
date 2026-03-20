@@ -24,7 +24,7 @@ class FortifyServiceProvider extends ServiceProvider
     }
 
     /**
-     * Bootstrap any application services.
+     * Initialize any application services.
      */
     public function boot(): void
     {
