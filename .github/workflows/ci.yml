@@ -50,7 +50,7 @@ jobs:
           --health-retries=3
     env:
       DB_CONNECTION: mysql
-      DB_HOST: mysql
+      DB_HOST: 127.0.0.1
       DB_PORT: 3306
       DB_DATABASE: testing
       DB_USERNAME: root
@@ -87,7 +87,7 @@ jobs:
           sudo apt-get install -y default-mysql-client
           echo "Waiting for MySQL to be ready..."
           for i in {1..30}; do
-            if mysqladmin ping -h mysql -P 3306 -uroot -p"${{ job.services.mysql.env.MYSQL_ROOT_PASSWORD }}" --silent; then
+            if mysqladmin ping -h 127.0.0.1 -P 3306 -uroot -p"${{ job.services.mysql.env.MYSQL_ROOT_PASSWORD }}" --silent; then
               echo "MySQL is up" && break
             fi
             echo "Waiting for MySQL... ($i)"

@@ -62,8 +62,6 @@ class DashboardController extends Controller
             $coursesTotal = Course::where('tenant_id', $tenantId)->count();
 
             $enrollmentsTotal = Enrollment::where('tenant_id', $tenantId)->count();
-            $activeEnrollments = Enrollment::where('tenant_id', $tenantId)->where('status', 'active')->count();
-            $retentionRate = $enrollmentsTotal > 0 ? round(($activeEnrollments / $enrollmentsTotal) * 100) : 0;
 
             $stats = [
                 ['label' => 'Total Teachers', 'value' => $teachersTotal, 'icon' => 'GraduationCap',
@@ -73,7 +71,7 @@ class DashboardController extends Controller
                 ['label' => 'Active Courses', 'value' => $coursesTotal, 'icon' => 'BookOpen',
                     'trend' => null],
                 ['label' => 'Enrollments', 'value' => $enrollmentsTotal, 'icon' => 'ListChecks',
-                    'trend' => $enrollmentsTotal > 0 ? "{$retentionRate}% ativos" : null],
+                    'trend' => null],
             ];
         } elseif ($role === 'teacher') {
             $teacher = $user->teacher;
