@@ -23,7 +23,9 @@ foreach (array_filter((['message']), 'is_string', ARRAY_FILTER_USE_KEY) as $__ke
 $__defined_vars = get_defined_vars();
 
 foreach ($attributes->all() as $__key => $__value) {
-    if (array_key_exists($__key, $__defined_vars)) unset($$__key);
+    if (array_key_exists($__key, $__defined_vars)) {
+        unset($$__key);
+    }
 }
 
 unset($__defined_vars, $__key, $__value); ?>

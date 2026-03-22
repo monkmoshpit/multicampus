@@ -2,24 +2,29 @@
 
 namespace App\Models;
 
-use App\Concerns\HasTenant;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
 class Student extends Model
 {
+    use BelongsToTenant;
     use HasFactory;
-    use HasTenant;
 
     // Ulid as primary key
     use HasUlids;
+
     public $incrementing = false;
+
     protected $keyType = 'string';
+
+    public $timestamps = false;
 
     protected $fillable = [
         'first_name',
         'last_name',
+        'email',
         'grade',
         'user_id',
     ];
@@ -38,5 +43,10 @@ class Student extends Model
     public function classrooms()
     {
         return $this->belongsToMany(Classroom::class, 'classroom_student');
+    }
+
+    public function grades()
+    {
+        return $this->hasMany(Grade::class);
     }
 }

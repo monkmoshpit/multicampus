@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
+use App\Models\Enrollment;
+use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
-use App\Models\Enrollment;
-use App\Models\Student;
-use App\Models\Course;
 
 class EnrollmentController extends Controller
 {
     public function index()
     {
-        $enrollments = Enrollment::forTenant()->with(['student', 'course'])->get();
-        $students = Student::forTenant()->get();
-        $courses = Course::forTenant()->get();
+        $enrollments = Enrollment::with(['student', 'course'])->get();
+        $students = Student::get();
+        $courses = Course::get();
 
         return Inertia::render('enrollment/index', [
             'enrollments' => $enrollments,
@@ -51,7 +51,7 @@ class EnrollmentController extends Controller
 
     public function destroy(Enrollment $enrollment)
     {
-        $enrollment = Enrollment::forTenant()->findOrFail($enrollment->id);
+        $enrollment = Enrollment::findOrFail($enrollment->id);
         $enrollment->delete();
 
         return Redirect::route('enrollments.index')->with('success', 'Enrollment deleted successfully.');

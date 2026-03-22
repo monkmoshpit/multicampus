@@ -2,22 +2,24 @@
 
 namespace App\Models;
 
-use App\Concerns\HasTenant;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
-use App\Models\Course;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
 class Enrollment extends Model
 {
+    use BelongsToTenant;
     use HasFactory;
-    use HasTenant;
-    
+
     // Ulid as primary key
     use HasUlids;
+
     public $incrementing = false;
+
     protected $keyType = 'string';
 
+    public $timestamps = false;
 
     protected $fillable = [
         'student_id',

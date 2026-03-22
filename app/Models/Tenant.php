@@ -2,25 +2,37 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Stancl\Tenancy\Database\Models\Tenant as BaseTenant;
 
-class Tenant extends Model
+class Tenant extends BaseTenant
 {
+    public static function getCustomColumns(): array
+    {
+        return [
+            'id',
+            'school_name',
+            'address',
+            'created_at',
+            'updated_at',
+        ];
+    }
+
     use HasFactory;
-    
+
     // Ulid as primary key
     use HasUlids;
-    public $incrementing = false;
-    protected $keyType = 'string';
 
+    public $incrementing = false;
+
+    protected $keyType = 'string';
 
     protected $fillable = [
         'school_name',
         'address',
     ];
-    
+
     // Relationships
     public function teachers()
     {

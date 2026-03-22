@@ -2,12 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
-use App\Models\Tenant;
-use App\Models\Teacher;
-use App\Models\Course;
 use App\Models\Student;
-use App\Models\Classroom;
+use App\Models\Teacher;
+use App\Models\Tenant;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -16,6 +14,7 @@ class ClassroomTest extends TestCase
     use RefreshDatabase;
 
     protected $user;
+
     protected $tenant;
 
     protected function setUp(): void

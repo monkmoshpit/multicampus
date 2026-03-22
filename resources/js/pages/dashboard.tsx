@@ -1,146 +1,148 @@
 import { Head } from '@inertiajs/react';
-import { BookOpen, Users, ListChecks, GraduationCap, Clock, TrendingUp, LayoutGrid, Folder, Book } from 'lucide-react';
+import {
+    Users,
+    GraduationCap,
+    BookOpen,
+    ListChecks,
+    Folder,
+    Book,
+    Clock,
+    TrendingUp,
+} from 'lucide-react';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 import AppLayout from '@/layouts/app-layout';
-import type { BreadcrumbItem } from '@/types';
 
-type Props = {
-    stats?: {
-        label: string;
-        value: string | number;
-        icon: string;
-        trend: string;
-    }[];
-    school_name?: string;
-    role?: string;
-    activities?: {
-        id: string;
-        description: string;
-        created_at: string;
-        user?: { name: string };
-    }[];
+type Stat = {
+    icon?: string;
+    label: string;
+    value: string | number;
+    trend?: string;
 };
 
+type Activity = {
+    id: string;
+    description: string;
+    user: { name: string };
+    created_at: string;
+};
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/dashboard',
-    },
-];
+export default function Dashboard({ stats, school_name, activities }: { stats: Stat[]; school_name?: string; activities: Activity[] }) {
+    const { t, i18n } = useTranslation();
 
-export default function Dashboard({ stats = [], school_name, activities = [], role }: Props) {
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Dashboard | MultiCampus" />
-            <div className="space-y-8 p-6 md:p-8 max-w-7xl mx-auto">
-                <header className="flex flex-col gap-2">
-                    <div className="flex items-center gap-3 mb-2">
-                        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-100 text-green-700 ring-2 ring-orange-100 dark:bg-green-900/40 dark:text-green-400 dark:ring-orange-900/40">
-                            <GraduationCap className="h-5 w-5" />
-                        </span>
-                        <h1 className="bg-gradient-to-r from-green-600 via-green-500 to-orange-500 bg-clip-text text-4xl font-extrabold tracking-tight text-transparent">
-                            {school_name || 'MultiCampus'}
+        <AppLayout>
+            <Head title={t('dashboard')} />
+
+            <div className="p-6 md:p-10 max-w-7xl mx-auto space-y-8">
+                {/* Header */}
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <div className="space-y-1">
+                        <h1 className="text-4xl font-extrabold tracking-tight text-primary uppercase">
+                            {t('dashboard')}
                         </h1>
+                        <p className="text-muted-foreground font-medium uppercase tracking-widest text-xs">
+                            {t('welcome_back_to')} <span className="text-foreground font-bold">{school_name || t('the_platform')}</span>
+                        </p>
                     </div>
-                    <p className="text-lg text-muted-foreground">
-                        {role === 'tenant' ? "Welcome back! Here's an overview of your institution today." : 
-                         role === 'teacher' ? "Hello! Here's how your classes and students are doing." :
-                         "Welcome back! Check your classes and progress below."}
-                    </p>
-                </header>
 
-                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                    {stats.map((stat: any, index: number) => {
-                        const Icon: any = {
-                            GraduationCap,
-                            Users,
-                            BookOpen,
-                            ListChecks,
-                            Folder,
-                            Book,
-                            TrendingUp,
-                            Clock
-                        }[stat.icon] || LayoutGrid;
+                </div>
 
+                {/* Stats Grid */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+                    {stats.map((stat: Stat, index: number) => {
+                        const iconMap: Record<string, React.ElementType> = {
+                            Users: Users,
+                            GraduationCap: GraduationCap,
+                            BookOpen: BookOpen,
+                            ListChecks: ListChecks,
+                            Folder: Folder,
+                            Book: Book,
+                            Clock: Clock,
+                            TrendingUp: TrendingUp,
+                        };
+                        const iconKey = String(stat.icon ?? '');
+                        const Icon = iconMap[iconKey] ?? LayoutGrid;
 
                         return (
-                            <div key={index} className="group relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
-                                <div className="flex items-start justify-between">
-                                    <div className="z-10">
-                                        <p className="text-sm font-medium text-muted-foreground">{stat.label}</p>
-                                        <p className="mt-3 text-4xl font-bold tracking-tight text-foreground">{stat.value}</p>
+                            <div key={index} className="group relative overflow-hidden bg-card border border-border p-6 transition-all hover:border-primary/50">
+                                <div className="absolute top-0 right-0 -mr-4 -mt-4 h-24 w-24 rounded-full bg-primary/5" />
+                                <div className="relative space-y-4">
+                                    <div className="flex items-center justify-between">
+                                        <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                                            <Icon className="h-5 w-5" />
+                                        </div>
+                                        <span className="text-[9px] font-bold text-muted-foreground/30">{index + 1}</span>
                                     </div>
-                                    <div className="z-10 rounded-xl bg-green-50 p-3 ring-1 ring-green-100/50 dark:bg-green-900/20 dark:ring-green-800/50">
-                                        <Icon className="h-6 w-6 text-green-600 dark:text-green-400" />
+                                    <div>
+                                            <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{t(stat.label)}</p>
+                                        <div className="flex items-baseline gap-2">
+                                            <h3 className="text-3xl font-black tracking-tighter text-foreground">{stat.value}</h3>
+                                            {stat.trend && <span className="text-[10px] font-bold text-emerald-500">{stat.trend}</span>}
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="mt-4 flex items-center text-sm text-green-600 dark:text-green-400">
-                                    {stat.trend.includes('+') ? <TrendingUp className="mr-1 h-4 w-4" /> : <Clock className="mr-1 h-4 w-4" />}
-                                    <span>{stat.trend}</span>
-                                </div>
-                                <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-green-50/50 blur-2xl transition-all group-hover:bg-green-100/50 dark:bg-green-900/10 dark:group-hover:bg-green-900/20"></div>
                             </div>
                         );
                     })}
                 </div>
 
-
-                <div className="grid gap-6 md:grid-cols-2">
-                    {/* Recent Activity Skeleton */}
-                    <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
-                        <div className="mb-6 flex items-center justify-between">
-                            <h2 className="text-lg font-bold text-foreground">Recent Activity</h2>
-                            <button className="text-sm font-medium text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300">View all</button>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                    {/* Activity Feed */}
+                    <div className="lg:col-span-2 space-y-6">
+                        <div className="flex items-center justify-between">
+                            <h2 className="text-xl font-black uppercase tracking-tight text-primary">
+                                {t('institutional_activity').split(' ')[0]} <span className="text-foreground">{t('institutional_activity').split(' ')[1]}</span>
+                            </h2>
+                            <div className="h-1 w-20 bg-primary/20 rounded-full" />
                         </div>
-                        <div className="flex flex-col justify-between space-y-6">
-                            {activities.length > 0 ? activities.map((activity) => (
-                                <div key={activity.id} className="flex items-start gap-4">
-                                    <div className="relative mt-1 flex h-2 w-2 items-center justify-center">
-                                        <div className="absolute h-full w-full animate-ping rounded-full bg-orange-400 opacity-20"></div>
-                                        <div className="h-2 w-2 rounded-full bg-orange-500"></div>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-foreground">
-                                            {activity.description}
-                                        </p>
-                                        <p className="mt-1 text-xs text-muted-foreground">
-                                            {activity.user?.name ? `By ${activity.user.name} • ` : ''}
-                                            {new Date(activity.created_at).toLocaleDateString()}
-                                        </p>
+
+                        <div className="space-y-4">
+                            {activities.length > 0 ? activities.map((activity: Activity) => (
+                                <div key={activity.id} className="relative pl-6 pb-6 border-l border-border last:pb-0 group">
+                                    <div className="absolute left-[-5px] top-0 h-2.5 w-2.5 rounded-full border-2 border-primary bg-background group-hover:bg-primary transition-colors" />
+                                    <div className="bg-card border border-border p-4 transition-all hover:border-primary/30 group-hover:shadow-sm">
+                                        <p className="text-sm font-bold text-foreground mb-1">{activity.description}</p>
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center gap-2">
+                                                <div className="h-4 w-4 rounded-full bg-muted flex items-center justify-center text-[8px] font-bold">
+                                                    {activity.user.name[0]}
+                                                </div>
+                                                <span className="text-[10px] font-medium text-muted-foreground uppercase">{activity.user.name}</span>
+                                            </div>
+                                            <span className="text-[10px] font-bold text-muted-foreground/60">{new Date(activity.created_at).toLocaleDateString(i18n.language)}</span>
+                                        </div>
                                     </div>
                                 </div>
                             )) : (
-                                <p className="text-sm text-muted-foreground">No recent activity found.</p>
+                                <p className="text-sm text-muted-foreground">{t('no_recent_activity')}</p>
                             )}
                         </div>
                     </div>
 
-                    {/* Quick Actions Skeleton */}
-                    <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
-                        <div className="mb-6 flex items-center justify-between">
-                            <h2 className="text-lg font-bold text-foreground">Quick Actions</h2>
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                            <button className="flex flex-col items-center justify-center gap-3 rounded-xl border border-border bg-muted/50 p-6 transition-colors hover:bg-muted dark:hover:bg-muted/80">
-                                <Users className="h-6 w-6 text-muted-foreground" />
-                                <span className="text-sm font-medium text-foreground">Add Student</span>
-                            </button>
-                            <button className="flex flex-col items-center justify-center gap-3 rounded-xl border border-border bg-muted/50 p-6 transition-colors hover:bg-muted dark:hover:bg-muted/80">
-                                <GraduationCap className="h-6 w-6 text-muted-foreground" />
-                                <span className="text-sm font-medium text-foreground">Hire Teacher</span>
-                            </button>
-                            <button className="flex flex-col items-center justify-center gap-3 rounded-xl border border-border bg-muted/50 p-6 transition-colors hover:bg-muted dark:hover:bg-muted/80">
-                                <BookOpen className="h-6 w-6 text-muted-foreground" />
-                                <span className="text-sm font-medium text-foreground">Create Course</span>
-                            </button>
-                            <button className="flex flex-col items-center justify-center gap-3 rounded-xl border border-border bg-muted/50 p-6 transition-colors hover:bg-muted dark:hover:bg-muted/80">
-                                <ListChecks className="h-6 w-6 text-muted-foreground" />
-                                <span className="text-sm font-medium text-foreground">Manage Classes</span>
-                            </button>
-                        </div>
-                    </div>
+                    {/* Quick Access or Info panel could go here */}
                 </div>
             </div>
         </AppLayout>
     );
 }
+
+const LayoutGrid = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    {...props}
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <rect width="7" height="7" x="3" y="3" rx="1" />
+    <rect width="7" height="7" x="14" y="3" rx="1" />
+    <rect width="7" height="7" x="14" y="14" rx="1" />
+    <rect width="7" height="7" x="3" y="14" rx="1" />
+  </svg>
+);

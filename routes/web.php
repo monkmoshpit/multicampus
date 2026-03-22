@@ -1,15 +1,17 @@
 <?php
 
+use App\Http\Controllers\ClassroomController;
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EnrollmentController;
+use App\Http\Controllers\GradeController;
+use App\Http\Controllers\InstitutionController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\TeacherController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\TeacherController;
-use App\Http\Controllers\StudentController;
-use App\Http\Controllers\CourseController;
-use App\Http\Controllers\EnrollmentController;
-use App\Http\Controllers\InstitutionController;
-use App\Http\Controllers\ClassroomController;
 
 Route::get('/', function () {
     return Inertia::render('welcome', [
@@ -23,11 +25,14 @@ Route::get('dashboard', [DashboardController::class, 'index'])
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/teachers', [TeacherController::class, 'index'])->name('teachers.index');
+    Route::get('/teachers/{teacher}', [TeacherController::class, 'show'])->name('teachers.show');
+    Route::post('/teachers/{teacher}/reset-password', [TeacherController::class, 'resetPassword'])->name('teachers.reset-password');
     Route::post('/teachers', [TeacherController::class, 'store'])->name('teachers.store');
     Route::put('/teachers/{teacher}', [TeacherController::class, 'update'])->name('teachers.update');
     Route::delete('/teachers/{teacher}', [TeacherController::class, 'destroy'])->name('teachers.destroy');
 
     Route::get('/students', [StudentController::class, 'index'])->name('students.index');
+    Route::post('/students/{student}/reset-password', [StudentController::class, 'resetPassword'])->name('students.reset-password');
     Route::post('/students', [StudentController::class, 'store'])->name('students.store');
     Route::put('/students/{student}', [StudentController::class, 'update'])->name('students.update');
     Route::delete('/students/{student}', [StudentController::class, 'destroy'])->name('students.destroy');
@@ -44,9 +49,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/institution', [InstitutionController::class, 'index'])->name('institution.index');
 
     Route::get('/classrooms', [ClassroomController::class, 'index'])->name('classrooms.index');
+    Route::get('/classrooms/{classroom}', [ClassroomController::class, 'show'])->name('classrooms.show');
     Route::post('/classrooms', [ClassroomController::class, 'store'])->name('classrooms.store');
     Route::put('/classrooms/{classroom}', [ClassroomController::class, 'update'])->name('classrooms.update');
     Route::delete('/classrooms/{classroom}', [ClassroomController::class, 'destroy'])->name('classrooms.destroy');
+
+    Route::resource('calendar-activities', App\Http\Controllers\CalendarActivityController::class)->except(['create', 'show', 'edit']);
+
+    Route::get('/reports/student/{student}', [ReportController::class, 'student'])->name('reports.student');
+    Route::get('/reports/classroom/{classroom}', [ReportController::class, 'classroom'])->name('reports.classroom');
+
+    Route::get('/grades', [GradeController::class, 'index'])->name('grades.index');
+    Route::post('/grades', [GradeController::class, 'store'])->name('grades.store');
 });
 
 require __DIR__.'/settings.php';

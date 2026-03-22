@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('students', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->foreignUlid('tenant_id')->constrained('tenants')->cascadeOnDelete();
-            $table->string('first_name',50);
-            $table->string('last_name',50);
+            $table->string('first_name', 50);
+            $table->string('last_name', 50);
             $table->string('grade');
             $table->timestamp('created_at')->useCurrent();
         });

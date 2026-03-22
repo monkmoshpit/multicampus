@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('courses', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->string('course_name',50);
+            $table->string('course_name', 50);
             $table->foreignUlid('tenant_id')->constrained('tenants')->cascadeOnDelete();
             $table->foreignUlid('teacher_id')->constrained('teachers')->cascadeOnDelete();
             $table->timestamp('created_at')->useCurrent();

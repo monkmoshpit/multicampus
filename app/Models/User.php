@@ -3,19 +3,17 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
-use Illuminate\Database\Eloquent\Concerns\HasUlids;
-use App\Models\Tenant;
-use App\Models\Teacher;
-use App\Models\Student;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, TwoFactorAuthenticatable;
+
     use HasUlids;
 
     /**
@@ -36,7 +34,9 @@ class User extends Authenticatable
      * Role constants.
      */
     const ROLE_TENANT = 'tenant';
+
     const ROLE_TEACHER = 'teacher';
+
     const ROLE_STUDENT = 'student';
 
     /**

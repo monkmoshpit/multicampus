@@ -15,7 +15,6 @@ test('new users can register', function () {
         'school_name' => 'Test School',
     ]);
 
-
     $this->assertAuthenticated();
     $response->assertRedirect(route('dashboard', absolute: false));
 });

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
 @import 'tailwindcss';
 
 @import 'tw-animate-css';
@@ -9,8 +9,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
-    --font-heading: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+    --font-sans: 'Roboto', ui-sans-serif, system-ui, sans-serif;
+    --font-heading: 'Roboto', ui-sans-serif, system-ui, sans-serif;
 
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
@@ -77,7 +77,7 @@
     --chart-3: #22c55e;
     --chart-4: #f97316;
     --chart-5: #10b981;
-    --radius: 0.625rem;
+    --radius: 0rem;
 
     /* Black Sidebar */
     --sidebar: #000000;
@@ -153,7 +153,12 @@
     .bg-blue-100 { background-color: #dbeafe !important; }
     .text-blue-600 { color: #2563eb !important; }
     .border-blue-200\/50 { border-color: rgba(191, 219, 254, 0.5) !important; }
-    .shadow-blue-500\/30 { shadow-color: rgba(59, 130, 246, 0.3) !important; }
+
+    /* Wave Animation */
+    @keyframes wave {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+    }
 
     /* Ink Flood Animation */
     @keyframes ink-flood {
@@ -165,10 +170,6 @@
         }
     }
 
-    .animate-ink-flood {
-        animation: ink-flood 800ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    }
-
     @keyframes ink-erase {
         from {
             clip-path: inset(0 0% 0 0);
@@ -178,79 +179,152 @@
         }
     }
 
+    .animate-ink-flood {
+        animation: ink-flood 800ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
     .animate-ink-erase {
         animation: ink-erase 800ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
     }
 
-    /* Theme Overrides (Can be applied to :root or any container) */
-    .theme-teacher {
-        --primary: #16a34a;
-        --ring: #16a34a;
-        --background: #ffffff;
-        --foreground: #09090b;
-        --sidebar-primary: #22c55e;
-        --sidebar-ring: #22c55e;
-        --chart-1: #16a34a;
+    /* Scroll Reveal Animations */
+    .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    .theme-student {
-        --primary: #ea580c;
-        --ring: #ea580c;
-        --background: #ffffff;
-        --foreground: #09090b;
-        --sidebar-primary: #f97316;
-        --sidebar-ring: #f97316;
-        --chart-1: #ea580c;
+    .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
     }
 
-    .theme-tenant {
-        --primary: #2563eb;
-        --ring: #2563eb;
-        --background: #ffffff;
-        --foreground: #09090b;
-        --sidebar-primary: #3b82f6;
-        --sidebar-ring: #3b82f6;
-        --chart-1: #2563eb;
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
     }
 
-    .dark .theme-teacher {
-        --background: #0c0a09;
-        --foreground: #fafaf9;
+    .animate-float {
+        animation: float 3s ease-in-out infinite;
     }
 
-/* Scroll Reveal Animations */
-.reveal {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.reveal.active {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.reveal-delay-1 { transition-delay: 0.1s; }
-.reveal-delay-2 { transition-delay: 0.2s; }
-.reveal-delay-3 { transition-delay: 0.3s; }
-
-@keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(0px); }
-}
-
-.animate-float {
-    animation: float 3s ease-in-out infinite;
-}
-    .dark .theme-student {
-        --background: #0c0a09;
-        --foreground: #fafaf9;
+    /* Premium UI Utilities */
+    .premium-card {
+        @apply border border-border bg-card p-8 transition-colors hover:bg-muted/50;
     }
-    .dark .theme-tenant {
-        --background: #0c0a09;
-        --foreground: #fafaf9;
+
+    .premium-heading {
+        @apply font-heading font-semibold tracking-tight;
+    }
+
+    /* Standardized Sidebar/Header Branding */
+    .brand-text {
+        @apply font-heading font-semibold tracking-tight;
     }
 }
+
+/* Theme Overrides (Applied to :root or any container, MUST be outside @layer base) */
+.theme-teacher {
+    --primary: #16a34a;
+    --ring: #16a34a;
+    --background: #ffffff;
+    --foreground: #09090b;
+    --sidebar-primary: #22c55e;
+    --sidebar-ring: #22c55e;
+    --chart-1: #16a34a;
+}
+
+.theme-student {
+    --primary: #ea580c;
+    --ring: #ea580c;
+    --background: #ffffff;
+    --foreground: #09090b;
+    --sidebar-primary: #f97316;
+    --sidebar-ring: #f97316;
+    --chart-1: #ea580c;
+}
+
+.theme-tenant {
+    --primary: #2563eb;
+    --ring: #2563eb;
+    --background: #ffffff;
+    --foreground: #09090b;
+    --sidebar-primary: #3b82f6;
+    --sidebar-ring: #3b82f6;
+    --chart-1: #2563eb;
+}
+
+.dark.theme-teacher {
+    --background: #0c0a09;
+    --foreground: #fafaf9;
+    --primary: #22c55e;
+    --ring: #22c55e;
+    --sidebar-primary: #22c55e;
+    --sidebar-ring: #22c55e;
+    --chart-1: #22c55e;
+}
+
+.dark.theme-student {
+    --background: #0c0a09;
+    --foreground: #fafaf9;
+    --primary: #f97316;
+    --ring: #f97316;
+    --sidebar-primary: #f97316;
+    --sidebar-ring: #f97316;
+    --chart-1: #f97316;
+}
+
+.dark.theme-tenant {
+    --background: #0c0a09;
+    --foreground: #fafaf9;
+    --primary: #3b82f6;
+    --ring: #3b82f6;
+    --sidebar-primary: #3b82f6;
+    --sidebar-ring: #3b82f6;
+    --chart-1: #3b82f6;
+}
+    .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+    }
+
+    .animate-float {
+        animation: float 3s ease-in-out infinite;
+    }
+
+    /* Premium UI Utilities */
+    .premium-card {
+        @apply border border-border bg-card p-8 transition-colors hover:bg-muted/50;
+    }
+
+    .premium-heading {
+        @apply font-heading font-semibold tracking-tight;
+    }
+
+    /* Standardized Sidebar/Header Branding */
+    .brand-text {
+        @apply font-heading font-semibold tracking-tight;
+    }
 
 
