@@ -65,9 +65,9 @@ class DashboardController extends Controller
 
             $stats = [
                 ['label' => 'Total Teachers', 'value' => $teachersTotal, 'icon' => 'GraduationCap',
-                    'trend' => $teachersThisMonth > 0 ? "+{$teachersThisMonth} este mês" : null],
+                    'trend' => $teachersThisMonth > 0 ? "+{$teachersThisMonth} " . __('this month') : null],
                 ['label' => 'Total Students', 'value' => $studentsTotal, 'icon' => 'Users',
-                    'trend' => $studentsThisSemester > 0 ? "+{$studentsThisSemester} este semestre" : null],
+                    'trend' => $studentsThisSemester > 0 ? "+{$studentsThisSemester} " . __('this semester') : null],
                 ['label' => 'Active Courses', 'value' => $coursesTotal, 'icon' => 'BookOpen',
                     'trend' => null],
                 ['label' => 'Enrollments', 'value' => $enrollmentsTotal, 'icon' => 'ListChecks',

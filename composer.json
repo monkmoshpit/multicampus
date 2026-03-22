@@ -1,11 +1,14 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/react-starter-kit",
+    "name": "guilherme/multicampus",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "A modern multi-tenant school management system built with Laravel, Inertia, React, and TypeScript.",
     "keywords": [
         "laravel",
-        "framework"
+        "inertiajs",
+        "react",
+        "typescript",
+        "multi-tenancy"
     ],
     "license": "MIT",
     "require": {
