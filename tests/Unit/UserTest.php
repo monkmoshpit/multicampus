@@ -21,7 +21,7 @@ test('it correctly identifies roles', function () {
 });
 
 test('it has hidden attributes for security', function () {
-    $user = new User();
-    
+    $user = new User;
+
     expect($user->getHidden())->toContain('password', 'two_factor_secret', 'remember_token');
 });
