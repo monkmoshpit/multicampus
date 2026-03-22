@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('grades', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('classroom_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('teacher_id')->constrained('teachers')->cascadeOnDelete();
+            $table->foreignUlid('student_id')->constrained()->cascadeOnDelete();
+            $table->foreignUlid('classroom_id')->constrained()->cascadeOnDelete();
+            $table->foreignUlid('teacher_id')->constrained('teachers')->cascadeOnDelete();
             $table->string('tenant_id');
             $table->decimal('score', 5, 2);
             $table->text('comments')->nullable();
