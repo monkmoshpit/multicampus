@@ -1,4 +1,4 @@
-# Multicampus — Projeto (Resumo em Português)
+# Multicampus
 Projeto de estudo que combina Laravel (backend) com Inertia + React + TypeScript (frontend).
 [![CI](https://github.com/monkmoshpit/multicampus/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/monkmoshpit/multicampus/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
@@ -33,8 +33,7 @@ Resumo rápido:
    ```bash
    php artisan migrate --seed
    ```
-   *Nota: Se o terminal perguntar se deseja criar o banco de dados 'laravel', digite 'yes'.*
-
+   
 6. **Inicie o projeto**:
    ```bash
    npm run dev

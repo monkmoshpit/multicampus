@@ -47,8 +47,6 @@
    ```bash
    php artisan migrate --seed
    ```
-   *Note: If asked to create the 'laravel' database, type 'yes' and press Enter.*
-
 6. **Run the Project**:
    ```bash
    npm run dev
