@@ -28,10 +28,35 @@
 
 ## ⚙️ Quick Start
 
-1. **Environment**: `cp .env.example .env`
-2. **Install**: `composer install && npm install`
-3. **Database**: `php artisan migrate --seed`
-4. **Dev**: `npm run dev` and `php artisan serve`
+1. **Clone the repository** and enter the project folder.
+2. **Environment Setup**: 
+   ```bash
+   cp .env.example .env
+   ```
+3. **Start Infrastructure (Docker)**:
+   ```bash
+   docker compose up -d
+   ```
+   *This starts MySQL and Redis containers.*
+
+4. **Install Dependencies & Generate Key**:
+   ```bash
+   composer install
+   npm install
+   php artisan key:generate
+   ```
+5. **Prepare the Database**:
+   ```bash
+   php artisan migrate --seed
+   ```
+   *Note: If asked to create the 'laravel' database, type 'yes' and press Enter.*
+
+6. **Run the Project**:
+   ```bash
+   npm run dev
+   # In another terminal:
+   php artisan serve
+   ```
 
 ## 👨‍💻 Technical Journey
 
