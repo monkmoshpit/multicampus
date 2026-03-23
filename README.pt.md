@@ -1,8 +1,6 @@
 # Multicampus — Projeto (Resumo em Português)
 Projeto de estudo que combina Laravel (backend) com Inertia + React + TypeScript (frontend).
 [![CI](https://github.com/monkmoshpit/multicampus/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/monkmoshpit/multicampus/actions/workflows/ci.yml)
-[![Tests](https://github.com/monkmoshpit/multicampus/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/monkmoshpit/multicampus/actions/workflows/ci.yml)
-[![Lint](https://img.shields.io/badge/lint-passing-brightgreen)](https://github.com/monkmoshpit/multicampus)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 Resumo rápido:
