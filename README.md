@@ -5,8 +5,6 @@
 
 > A modern, multi-tenant school management system built with Laravel 12, Inertia.js, React 19, and TypeScript.
 
-[🇧🇷 Leia a versão em Português](README.pt.md)
-
 ## 📋 Overview
 
 **MultiCampus** is a full-stack platform designed to manage educational institutions with a high focus on technical proficiency and scalability. It features a custom multi-tenancy implementation allowing completely isolated environments for different schools/institutions.
