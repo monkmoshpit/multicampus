@@ -28,8 +28,9 @@
 
 1. **Environment**: `cp .env.example .env`
 2. **Install**: `composer install && npm install`
-3. **Database**: `php artisan migrate --seed`
-4. **Dev**: `npm run dev` and `php artisan serve`
+3. **MySQl and Redis**: `docker compose up -d`
+4. **Database**: `php artisan migrate --seed`
+5. **Dev**: `npm run dev` and `php artisan serve`
 
 ## 👨‍💻 Technical Journey
 
