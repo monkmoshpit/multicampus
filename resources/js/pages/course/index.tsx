@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogC
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import InputError from '@/components/input-error';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 
@@ -203,56 +204,63 @@ export default function Courses({ courses, teachers }: { courses: Course[]; teac
  {editingCourse ? t('edit_course_desc') : t('add_course_desc')}
  </p>
  </DialogHeader>
- <Form 
- action={editingCourse ? `/courses/${editingCourse.id}` : '/courses'} 
- method="post" 
- className="space-y-4 py-2"
- onSuccess={() => {
- setIsCreating(false);
- setEditingCourse(null);
- }}
- >
- {editingCourse && <input type="hidden" name="_method" value="PUT" />}
- <div className="grid gap-2">
- <Label htmlFor="course_name" className="text-sm font-medium text-foreground">{t('course_name')}</Label>
- <Input
- id="course_name"
- name="course_name"
- defaultValue={editingCourse?.course_name || ''}
- placeholder="Mathematics 101"
- required
- className="border-input focus-visible:ring-primary"
- />
- </div>
- <div className="grid gap-2">
- <Label htmlFor="teacher_id" className="text-sm font-medium text-foreground">{t('assigned_teacher')}</Label>
- <select
- id="teacher_id"
- name="teacher_id"
- required
- defaultValue={editingCourse?.teacher_id || ''}
- className="flex h-10 w-full border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
- >
- <option value="" disabled>{t('select_teacher_placeholder')}</option>
- {teachers.map((teacher) => (
- <option key={teacher.id} value={teacher.id}>
- {teacher.first_name} {teacher.last_name}
- </option>
- ))}
- </select>
- </div>
- <DialogFooter className="pt-4 sm:justify-between">
- <DialogClose asChild>
- <Button variant="ghost" type="button" className="text-muted-foreground">{t('cancel')}</Button>
- </DialogClose>
- <Button
- type="submit"
- className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
- >
- {editingCourse ? t('save_changes') : t('create_course')}
- </Button>
- </DialogFooter>
- </Form>
+                <Form
+                    action={editingCourse ? `/courses/${editingCourse.id}` : '/courses'}
+                    method="post"
+                    className="space-y-4 py-2"
+                    onSuccess={() => {
+                        setIsCreating(false);
+                        setEditingCourse(null);
+                    }}
+                >
+                    {({ errors, processing }) => (
+                        <>
+                            {editingCourse && <input type="hidden" name="_method" value="PUT" />}
+                            <div className="grid gap-2">
+                                <Label htmlFor="course_name" className="text-sm font-medium text-foreground">{t('course_name')}</Label>
+                                <Input
+                                    id="course_name"
+                                    name="course_name"
+                                    defaultValue={editingCourse?.course_name || ''}
+                                    placeholder="Mathematics 101"
+                                    required
+                                    className="border-input focus-visible:ring-primary"
+                                />
+                                <InputError message={errors.course_name} />
+                            </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="teacher_id" className="text-sm font-medium text-foreground">{t('assigned_teacher')}</Label>
+                                <select
+                                    id="teacher_id"
+                                    name="teacher_id"
+                                    required
+                                    defaultValue={editingCourse?.teacher_id || ''}
+                                    className="flex h-10 w-full border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                >
+                                    <option value="" disabled>{t('select_teacher_placeholder')}</option>
+                                    {teachers.map((teacher) => (
+                                        <option key={teacher.id} value={teacher.id}>
+                                            {teacher.first_name} {teacher.last_name}
+                                        </option>
+                                    ))}
+                                </select>
+                                <InputError message={errors.teacher_id} />
+                            </div>
+                            <DialogFooter className="pt-4 sm:justify-between">
+                                <DialogClose asChild>
+                                    <Button variant="ghost" type="button" className="text-muted-foreground" disabled={processing}>{t('cancel')}</Button>
+                                </DialogClose>
+                                <Button
+                                    type="submit"
+                                    className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
+                                    disabled={processing}
+                                >
+                                    {editingCourse ? t('save_changes') : t('create_course')}
+                                </Button>
+                            </DialogFooter>
+                        </>
+                    )}
+                </Form>
  </DialogContent>
  </Dialog>
  </div>

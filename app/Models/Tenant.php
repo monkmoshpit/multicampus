@@ -14,6 +14,10 @@ class Tenant extends BaseTenant
             'id',
             'school_name',
             'address',
+            'registration_id',
+            'domain',
+            'official_email',
+            'support_line',
             'created_at',
             'updated_at',
         ];
@@ -31,6 +35,10 @@ class Tenant extends BaseTenant
     protected $fillable = [
         'school_name',
         'address',
+        'registration_id',
+        'domain',
+        'official_email',
+        'support_line',
     ];
 
     // Relationships

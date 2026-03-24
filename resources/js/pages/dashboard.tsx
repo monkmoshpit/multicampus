@@ -66,7 +66,6 @@ export default function Dashboard({ stats, school_name, activities }: { stats: S
 
                         return (
                             <div key={index} className="group relative overflow-hidden bg-card border border-border p-6 transition-all hover:border-primary/50">
-                                <div className="absolute top-0 right-0 -mr-4 -mt-4 h-24 w-24 rounded-full bg-primary/5" />
                                 <div className="relative space-y-4">
                                     <div className="flex items-center justify-between">
                                         <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">

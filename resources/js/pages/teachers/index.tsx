@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogC
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import InputError from '@/components/input-error';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 
@@ -192,75 +193,84 @@ export default function Teachers({ teachers }: { teachers: Teacher[] }) {
  {editingTeacher ? t('edit_teacher_desc') : t('add_teacher_desc')}
  </p>
  </DialogHeader>
- <Form 
- action={editingTeacher ? `/teachers/${editingTeacher.id}` : '/teachers'} 
- method="post" 
- className="space-y-4 py-2"
- onSuccess={() => {
- setIsCreating(false);
- setEditingTeacher(null);
- }}
- >
- {editingTeacher && <input type="hidden" name="_method" value="PUT" />}
- <div className="grid gap-2">
- <Label htmlFor="first_name" className="text-sm font-medium text-foreground">{t('first_name')}</Label>
- <Input
- id="first_name"
- name="first_name"
- defaultValue={editingTeacher?.first_name || ''}
- placeholder="Jane"
- required
- className="border-input focus-visible:ring-primary"
- />
- </div>
- <div className="grid gap-2">
- <Label htmlFor="last_name" className="text-sm font-medium text-foreground">{t('last_name')}</Label>
- <Input
- id="last_name"
- name="last_name"
- defaultValue={editingTeacher?.last_name || ''}
- placeholder="Doe"
- required
- className="border-input focus-visible:ring-primary"
- />
- </div>
- <div className="grid gap-2">
- <Label htmlFor="email" className="text-sm font-medium text-foreground">{t('email_address')}</Label>
- <Input
- id="email"
- name="email"
- type="email"
- defaultValue={editingTeacher?.email || ''}
- placeholder="jane.doe@institution.edu"
- required
- className="border-input focus-visible:ring-primary"
- />
- </div>
- {!editingTeacher && (
- <div className="grid gap-2">
- <Label htmlFor="password" title={t('leave_blank_default')} className="text-sm font-medium text-foreground">{t('initial_password_optional')}</Label>
- <Input
- id="password"
- name="password"
- type="password"
- placeholder="••••••••"
- className="border-input focus-visible:ring-primary"
- />
- <p className="text-[10px] text-muted-foreground uppercase tracking-widest">{t('leave_blank_default')}</p>
- </div>
- )}
- <DialogFooter className="pt-4 sm:justify-between">
- <DialogClose asChild>
- <Button variant="ghost" type="button" className="text-muted-foreground">{t('cancel')}</Button>
- </DialogClose>
- <Button
- type="submit"
- className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
- >
- {editingTeacher ? t('save_changes') : t('create_teacher')}
- </Button>
- </DialogFooter>
- </Form>
+                <Form
+                    action={editingTeacher ? `/teachers/${editingTeacher.id}` : '/teachers'}
+                    method="post"
+                    className="space-y-4 py-2"
+                    onSuccess={() => {
+                        setIsCreating(false);
+                        setEditingTeacher(null);
+                    }}
+                >
+                    {({ errors, processing }) => (
+                        <>
+                            {editingTeacher && <input type="hidden" name="_method" value="PUT" />}
+                            <div className="grid gap-2">
+                                <Label htmlFor="first_name" className="text-sm font-medium text-foreground">{t('first_name')}</Label>
+                                <Input
+                                    id="first_name"
+                                    name="first_name"
+                                    defaultValue={editingTeacher?.first_name || ''}
+                                    placeholder="Jane"
+                                    required
+                                    className="border-input focus-visible:ring-primary"
+                                />
+                                <InputError message={errors.first_name} />
+                            </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="last_name" className="text-sm font-medium text-foreground">{t('last_name')}</Label>
+                                <Input
+                                    id="last_name"
+                                    name="last_name"
+                                    defaultValue={editingTeacher?.last_name || ''}
+                                    placeholder="Doe"
+                                    required
+                                    className="border-input focus-visible:ring-primary"
+                                />
+                                <InputError message={errors.last_name} />
+                            </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="email" className="text-sm font-medium text-foreground">{t('email_address')}</Label>
+                                <Input
+                                    id="email"
+                                    name="email"
+                                    type="email"
+                                    defaultValue={editingTeacher?.email || ''}
+                                    placeholder="jane.doe@institution.edu"
+                                    required
+                                    className="border-input focus-visible:ring-primary"
+                                />
+                                <InputError message={errors.email} />
+                            </div>
+                            {!editingTeacher && (
+                                <div className="grid gap-2">
+                                    <Label htmlFor="password" title={t('leave_blank_default')} className="text-sm font-medium text-foreground">{t('initial_password_optional')}</Label>
+                                    <Input
+                                        id="password"
+                                        name="password"
+                                        type="password"
+                                        placeholder="••••••••"
+                                        className="border-input focus-visible:ring-primary"
+                                    />
+                                    <InputError message={errors.password} />
+                                    <p className="text-[10px] text-muted-foreground uppercase tracking-widest">{t('leave_blank_default')}</p>
+                                </div>
+                            )}
+                            <DialogFooter className="pt-4 sm:justify-between">
+                                <DialogClose asChild>
+                                    <Button variant="ghost" type="button" className="text-muted-foreground" disabled={processing}>{t('cancel')}</Button>
+                                </DialogClose>
+                                <Button
+                                    type="submit"
+                                    className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
+                                    disabled={processing}
+                                >
+                                    {editingTeacher ? t('save_changes') : t('create_teacher')}
+                                </Button>
+                            </DialogFooter>
+                        </>
+                    )}
+                </Form>
  </DialogContent>
  </Dialog>
 
@@ -272,30 +282,35 @@ export default function Teachers({ teachers }: { teachers: Teacher[] }) {
  {t('resetting_password_for', { name: `${resettingTeacher?.first_name} ${resettingTeacher?.last_name}` })}
  </p>
  </DialogHeader>
- <Form 
- action={`/teachers/${resettingTeacher?.id}/reset-password`} 
- method="post" 
- className="space-y-4 py-2"
- onSuccess={() => setResettingTeacher(null)}
- >
- <div className="grid gap-2">
- <Label htmlFor="reset_password" title={t('leave_blank_default')} className="text-sm font-medium text-foreground">{t('new_password_optional')}</Label>
- <Input
- id="reset_password"
- name="password"
- type="password"
- placeholder="••••••••"
- className="border-input focus-visible:ring-primary"
- />
- <p className="text-[10px] text-muted-foreground uppercase tracking-widest">{t('leave_blank_default')}</p>
- </div>
- <DialogFooter className="pt-4 sm:justify-between">
- <DialogClose asChild>
- <Button variant="ghost" type="button" className="text-muted-foreground">{t('cancel')}</Button>
- </DialogClose>
- <Button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium">{t('reset_password')}</Button>
- </DialogFooter>
- </Form>
+                <Form
+                    action={`/teachers/${resettingTeacher?.id}/reset-password`}
+                    method="post"
+                    className="space-y-4 py-2"
+                    onSuccess={() => setResettingTeacher(null)}
+                >
+                    {({ errors, processing }) => (
+                        <>
+                            <div className="grid gap-2">
+                                <Label htmlFor="reset_password" title={t('leave_blank_default')} className="text-sm font-medium text-foreground">{t('new_password_optional')}</Label>
+                                <Input
+                                    id="reset_password"
+                                    name="password"
+                                    type="password"
+                                    placeholder="••••••••"
+                                    className="border-input focus-visible:ring-primary"
+                                />
+                                <InputError message={errors.password} />
+                                <p className="text-[10px] text-muted-foreground uppercase tracking-widest">{t('leave_blank_default')}</p>
+                            </div>
+                            <DialogFooter className="pt-4 sm:justify-between">
+                                <DialogClose asChild>
+                                    <Button variant="ghost" type="button" className="text-muted-foreground" disabled={processing}>{t('cancel')}</Button>
+                                </DialogClose>
+                                <Button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium" disabled={processing}>{t('reset_password')}</Button>
+                            </DialogFooter>
+                        </>
+                    )}
+                </Form>
  </DialogContent>
  </Dialog>
  </div>

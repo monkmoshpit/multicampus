@@ -10,6 +10,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import InputError from '@/components/input-error';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 
@@ -258,112 +259,118 @@ export default function Classrooms({
  </p>
  </DialogHeader>
  
- <Form 
- action={editingClassroom ? `/classrooms/${editingClassroom.id}` : '/classrooms'} 
- method="post" 
- className="space-y-6 py-4"
- onSuccess={() => {
- setIsCreating(false);
- setEditingClassroom(null);
- }}
- >
- {editingClassroom && <input type="hidden" name="_method" value="PUT" />}
- 
- <div className="grid gap-2">
- <Label htmlFor="name" className="text-sm font-medium text-foreground">{t('classroom_name')}</Label>
- <Input
- id="name"
- name="name"
- defaultValue={editingClassroom?.name || ''}
- placeholder="Room 101 - Level A"
- required
- className={`border-input focus-visible:ring-primary ${errors?.name ? 'border-destructive' : ''}`}
- />
- {errors?.name && <p className="text-xs text-destructive">{errors.name}</p>}
- </div>
+                <Form
+                    action={editingClassroom ? `/classrooms/${editingClassroom.id}` : '/classrooms'}
+                    method="post"
+                    className="space-y-6 py-4"
+                    onSuccess={() => {
+                        setIsCreating(false);
+                        setEditingClassroom(null);
+                    }}
+                >
+                    {({ errors: formErrors, processing }) => (
+                        <>
+                            {editingClassroom && <input type="hidden" name="_method" value="PUT" />}
 
- <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
- <div className="grid gap-2">
- <Label htmlFor="teacher_id" className="text-sm font-medium text-foreground">{t('primary_teacher')}</Label>
- <Select name="teacher_id" defaultValue={editingClassroom?.teacher_id || ''}>
- <SelectTrigger className={`w-full ${errors?.teacher_id ? 'border-destructive' : ''}`}>
- <SelectValue placeholder={t('select_teacher')} />
- </SelectTrigger>
- <SelectContent>
- {teachers.map((teacher) => (
- <SelectItem key={teacher.id} value={teacher.id}>
- {teacher.first_name} {teacher.last_name}
- </SelectItem>
- ))}
- </SelectContent>
- </Select>
- {errors?.teacher_id && <p className="text-xs text-destructive">{errors.teacher_id}</p>}
- </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="name" className="text-sm font-medium text-foreground">{t('classroom_name')}</Label>
+                                <Input
+                                    id="name"
+                                    name="name"
+                                    defaultValue={editingClassroom?.name || ''}
+                                    placeholder="Room 101 - Level A"
+                                    required
+                                    className="border-input focus-visible:ring-primary"
+                                />
+                                <InputError message={formErrors.name} />
+                            </div>
 
- <div className="grid gap-2">
- <Label htmlFor="course_id" className="text-sm font-medium text-foreground">{t('associated_course')}</Label>
- <Select name="course_id" defaultValue={editingClassroom?.course_id || 'none'}>
- <SelectTrigger className={`w-full ${errors?.course_id ? 'border-destructive' : ''}`}>
- <SelectValue placeholder={t('select_course_optional')} />
- </SelectTrigger>
- <SelectContent>
- <SelectItem value="none">{t('none')}</SelectItem>
- {courses.map((course) => (
- <SelectItem key={course.id} value={course.id}>
- {course.course_name}
- </SelectItem>
- ))}
- </SelectContent>
- </Select>
- {errors?.course_id && <p className="text-xs text-destructive">{errors.course_id}</p>}
- </div>
- </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="grid gap-2">
+                                    <Label htmlFor="teacher_id" className="text-sm font-medium text-foreground">{t('primary_teacher')}</Label>
+                                    <Select name="teacher_id" defaultValue={editingClassroom?.teacher_id || ''}>
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder={t('select_teacher')} />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {teachers.map((teacher) => (
+                                                <SelectItem key={teacher.id} value={teacher.id}>
+                                                    {teacher.first_name} {teacher.last_name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <InputError message={formErrors.teacher_id} />
+                                </div>
 
- <div className="space-y-3">
- <Label className="text-sm font-medium text-foreground flex items-center justify-between">
- <span>{t('students_selected', { count: selectedStudentIds.length })}</span>
- <span className="text-xs text-muted-foreground font-normal">{t('select_all_apply')}</span>
- </Label>
- <div className="border border-border bg-muted/10 p-4 max-h-48 overflow-y-auto">
- <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
- {allStudents.map((student) => (
- <div key={student.id} className="flex items-center space-x-2">
- <Checkbox 
- id={`student-${student.id}`} 
- checked={selectedStudentIds.includes(student.id)}
- onCheckedChange={() => toggleStudent(student.id)}
- />
- <Label 
- htmlFor={`student-${student.id}`}
- className="text-sm font-normal cursor-pointer leading-none"
- >
- {student.first_name} {student.last_name}
- <span className="ml-1.5 text-[10px] uppercase text-muted-foreground font-bold">
- {student.grade}
- </span>
- </Label>
- </div>
- ))}
- </div>
- </div>
- {/* Hidden inputs for the student_ids array */}
- {selectedStudentIds.map((id) => (
- <input key={id} type="hidden" name="student_ids[]" value={id} />
- ))}
- </div>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="course_id" className="text-sm font-medium text-foreground">{t('associated_course')}</Label>
+                                    <Select name="course_id" defaultValue={editingClassroom?.course_id || 'none'}>
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder={t('select_course_optional')} />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="none">{t('none')}</SelectItem>
+                                            {courses.map((course) => (
+                                                <SelectItem key={course.id} value={course.id}>
+                                                    {course.course_name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <InputError message={formErrors.course_id} />
+                                </div>
+                            </div>
 
- <DialogFooter className="pt-4 sm:justify-between border-t border-border mt-4">
- <DialogClose asChild>
- <Button variant="ghost" type="button" className="text-muted-foreground">{t('cancel')}</Button>
- </DialogClose>
- <Button
- type="submit"
- className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
- >
- {editingClassroom ? t('save_changes') : t('create_classroom')}
- </Button>
- </DialogFooter>
- </Form>
+                            <div className="space-y-3">
+                                <Label className="text-sm font-medium text-foreground flex items-center justify-between">
+                                    <span>{t('students_selected', { count: selectedStudentIds.length })}</span>
+                                    <span className="text-xs text-muted-foreground font-normal">{t('select_all_apply')}</span>
+                                </Label>
+                                <div className="border border-border bg-muted/10 p-4 max-h-48 overflow-y-auto">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        {allStudents.map((student) => (
+                                            <div key={student.id} className="flex items-center space-x-2">
+                                                <Checkbox
+                                                    id={`student-${student.id}`}
+                                                    checked={selectedStudentIds.includes(student.id)}
+                                                    onCheckedChange={() => toggleStudent(student.id)}
+                                                />
+                                                <Label
+                                                    htmlFor={`student-${student.id}`}
+                                                    className="text-sm font-normal cursor-pointer leading-none"
+                                                >
+                                                    {student.first_name} {student.last_name}
+                                                    <span className="ml-1.5 text-[10px] uppercase text-muted-foreground font-bold">
+                                                        {student.grade}
+                                                    </span>
+                                                </Label>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                                <InputError message={formErrors.student_ids} />
+                                {/* Hidden inputs for the student_ids array */}
+                                {selectedStudentIds.map((id) => (
+                                    <input key={id} type="hidden" name="student_ids[]" value={id} />
+                                ))}
+                            </div>
+
+                            <DialogFooter className="pt-4 sm:justify-between border-t border-border mt-4">
+                                <DialogClose asChild>
+                                    <Button variant="ghost" type="button" className="text-muted-foreground" disabled={processing}>{t('cancel')}</Button>
+                                </DialogClose>
+                                <Button
+                                    type="submit"
+                                    className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
+                                    disabled={processing}
+                                >
+                                    {editingClassroom ? t('save_changes') : t('create_classroom')}
+                                </Button>
+                            </DialogFooter>
+                        </>
+                    )}
+                </Form>
  </DialogContent>
  </Dialog>
  </div>

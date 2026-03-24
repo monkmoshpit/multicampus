@@ -36,5 +36,12 @@
     "classroom_label": "Sala de Aula",
     "institution_label": "Instituição",
     "academic_management": "Gestão Acadêmica",
-    "no_recent_activity": "Nenhuma atividade recente."
+    "no_recent_activity": "Nenhuma atividade recente.",
+    "These credentials do not match our records.": "Essas credenciais não coincidem com nossos registros.",
+    "The provided password is incorrect.": "A senha informada está incorreta.",
+    "The email field is required.": "O campo e-mail é obrigatório.",
+    "The password field is required.": "O campo senha é obrigatório.",
+    "The email must be a valid email address.": "O e-mail deve ser um endereço de e-mail válido.",
+    "this month": "este mês",
+    "this semester": "este semestre"
 }

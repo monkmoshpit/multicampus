@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogC
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import InputError from '@/components/input-error';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 
@@ -205,55 +206,58 @@ export default function Enrollments({ enrollments, students, courses }: { enroll
  {t('add_enrollment_desc')}
  </p>
  </DialogHeader>
- <Form 
- action="/enrollments" 
- method="post" 
- className="space-y-4 py-2"
- >
- <div className="grid gap-2">
- <Label htmlFor="student_id" className="text-sm font-medium text-foreground">{t('student')}</Label>
- <select
- id="student_id"
- name="student_id"
- required
- className="flex h-10 w-full border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
- >
- <option value="" disabled>{t('select_student_placeholder')}</option>
- {students.map((student) => (
- <option key={student.id} value={student.id}>
- {student.first_name} {student.last_name}
- </option>
- ))}
- </select>
- </div>
- <div className="grid gap-2">
- <Label htmlFor="course_id" className="text-sm font-medium text-foreground">{t('course')}</Label>
- <select
- id="course_id"
- name="course_id"
- required
- className="flex h-10 w-full border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
- >
- <option value="" disabled>{t('select_course_placeholder')}</option>
- {courses.map((course) => (
- <option key={course.id} value={course.id}>
- {course.course_name}
- </option>
- ))}
- </select>
- </div>
- <DialogFooter className="pt-4 sm:justify-between">
- <DialogClose asChild>
- <Button variant="ghost" type="button" className="text-muted-foreground">{t('cancel')}</Button>
- </DialogClose>
- <Button
- type="submit"
- className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
- >
- {t('complete_enrollment')}
- </Button>
- </DialogFooter>
- </Form>
+                <Form action="/enrollments" method="post" className="space-y-4 py-2">
+                    {({ errors, processing }) => (
+                        <>
+                            <div className="grid gap-2">
+                                <Label htmlFor="student_id" className="text-sm font-medium text-foreground">{t('student')}</Label>
+                                <select
+                                    id="student_id"
+                                    name="student_id"
+                                    required
+                                    className="flex h-10 w-full border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                >
+                                    <option value="" disabled>{t('select_student_placeholder')}</option>
+                                    {students.map((student) => (
+                                        <option key={student.id} value={student.id}>
+                                            {student.first_name} {student.last_name}
+                                        </option>
+                                    ))}
+                                </select>
+                                <InputError message={errors.student_id} />
+                            </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="course_id" className="text-sm font-medium text-foreground">{t('course')}</Label>
+                                <select
+                                    id="course_id"
+                                    name="course_id"
+                                    required
+                                    className="flex h-10 w-full border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                >
+                                    <option value="" disabled>{t('select_course_placeholder')}</option>
+                                    {courses.map((course) => (
+                                        <option key={course.id} value={course.id}>
+                                            {course.course_name}
+                                        </option>
+                                    ))}
+                                </select>
+                                <InputError message={errors.course_id} />
+                            </div>
+                            <DialogFooter className="pt-4 sm:justify-between">
+                                <DialogClose asChild>
+                                    <Button variant="ghost" type="button" className="text-muted-foreground" disabled={processing}>{t('cancel')}</Button>
+                                </DialogClose>
+                                <Button
+                                    type="submit"
+                                    className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
+                                    disabled={processing}
+                                >
+                                    {t('complete_enrollment')}
+                                </Button>
+                            </DialogFooter>
+                        </>
+                    )}
+                </Form>
  </DialogContent>
  </Dialog>
  </div>
