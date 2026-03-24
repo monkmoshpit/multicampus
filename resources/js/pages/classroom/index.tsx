@@ -2,6 +2,7 @@ import { Form, Head, Link } from '@inertiajs/react';
 import { Trash2, Edit, Plus, Search, MoreHorizontal, Users, GraduationCap, BookOpen } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import InputError from '@/components/input-error';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -10,7 +11,6 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import InputError from '@/components/input-error';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 
@@ -47,13 +47,11 @@ export default function Classrooms({
  teachers, 
  courses, 
  allStudents,
- errors,
  }: { 
  classrooms: Classroom[];
  teachers: Teacher[];
  courses: Course[];
  allStudents: Student[];
- errors: Record<string, string>;
  }) {
  const { t } = useTranslation();
  const [editingClassroom, setEditingClassroom] = useState<Classroom | null>(null);

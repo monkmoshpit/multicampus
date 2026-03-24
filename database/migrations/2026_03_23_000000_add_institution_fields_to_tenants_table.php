@@ -12,16 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('tenants', function (Blueprint $row) {
-            if (!Schema::hasColumn('tenants', 'registration_id')) {
+            if (! Schema::hasColumn('tenants', 'registration_id')) {
                 $row->string('registration_id')->nullable();
             }
-            if (!Schema::hasColumn('tenants', 'domain')) {
+            if (! Schema::hasColumn('tenants', 'domain')) {
                 $row->string('domain')->nullable();
             }
-            if (!Schema::hasColumn('tenants', 'official_email')) {
+            if (! Schema::hasColumn('tenants', 'official_email')) {
                 $row->string('official_email')->nullable();
             }
-            if (!Schema::hasColumn('tenants', 'support_line')) {
+            if (! Schema::hasColumn('tenants', 'support_line')) {
                 $row->string('support_line')->nullable();
             }
         });
