@@ -1,0 +1,2 @@
+[build]
+nixpkgs = ["php82-pdo_mysql"]
