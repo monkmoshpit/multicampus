@@ -1,10 +1,14 @@
 FROM node:22-alpine AS frontend
 RUN apk add --no-cache php php-cli php-mbstring php-xml php-tokenizer php-phar php-openssl
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build
+
+RUN composer install --no-dev --ignore-platform-reqs
 
 FROM php:8.2-fpm-alpine
 
