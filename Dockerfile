@@ -1,5 +1,5 @@
 FROM node:22-alpine AS frontend
-RUN apk add --no-cache php php-cli php-mbstring php-xml php-tokenizer php-phar php-openssl
+RUN apk add --no-cache php php-cli php-mbstring php-xml php-tokenizer php-phar php-openssl php-pdo
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
