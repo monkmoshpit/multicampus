@@ -1,9 +1,11 @@
 FROM node:22-alpine AS frontend
 RUN apk add --no-cache php php-cli php-mbstring php-tokenizer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
+RUN composer install --no-dev
 RUN npm run build
 
 FROM php:8.2-fpm-alpine
