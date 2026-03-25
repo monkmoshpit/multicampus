@@ -1,3 +1,10 @@
+FROM node:18-alpine AS frontend
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
 FROM php:8.2-fpm-alpine
 
 RUN apk add --no-cache \
@@ -7,6 +14,7 @@ RUN apk add --no-cache \
     oniguruma-dev \
     icu-dev \
     supervisor
+
 RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd intl
 
 RUN apk add --no-cache pcre-dev $PHPIZE_DEPS \
@@ -17,6 +25,8 @@ RUN apk add --no-cache pcre-dev $PHPIZE_DEPS \
 WORKDIR /var/www/html
 
 COPY . .
+
+COPY --from=frontend /app/public/build ./public/build
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN composer install --no-dev --optimize-autoloader
