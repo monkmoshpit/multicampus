@@ -1,9 +1,8 @@
 FROM node:22-alpine AS frontend
+RUN apk add --no-cache php php-cli php-mbstring php-xml php-tokenizer php-phar php-openssl
 WORKDIR /app
-
 COPY package*.json ./
 RUN npm install
-
 COPY . .
 RUN npm run build
 
