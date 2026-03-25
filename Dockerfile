@@ -1,11 +1,10 @@
 FROM node:22-alpine AS frontend
-RUN apk add --no-cache php php-cli php-phar php-openssl php-mbstring php-tokenizer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /app
+
 COPY package*.json ./
 RUN npm install
+
 COPY . .
-RUN composer install --no-dev
 RUN npm run build
 
 FROM php:8.2-fpm-alpine
@@ -19,7 +18,7 @@ RUN apk add --no-cache \
     supervisor
 
 RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd intl
-
+    
 RUN apk add --no-cache pcre-dev $PHPIZE_DEPS \
     && pecl install redis \
     && docker-php-ext-enable redis \
