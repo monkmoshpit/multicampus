@@ -1,5 +1,5 @@
 FROM node:22-alpine AS frontend
-RUN apk add --no-cache php php-cli php-mbstring php-xml php-tokenizer php-phar php-openssl php-pdo
+RUN apk add --no-cache php php-cli php-mbstring php-xml php-dom php-tokenizer php-phar php-openssl php-pdo
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
@@ -7,7 +7,7 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 
-RUN composer install --no-dev --ignore-platform-reqs
+RUN composer install --no-dev --ignore-platform-reqs --no-scripts
 
 RUN npm run build
 
