@@ -1,2 +1,2 @@
 [build]
-nixpkgs = ["php82-pdo_mysql"]
+nixpkgs = ["php82", "php82-extensions.pdo_mysql"]
