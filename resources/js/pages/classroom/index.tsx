@@ -1,5 +1,5 @@
 import { Form, Head, Link } from '@inertiajs/react';
-import { Trash2, Edit, Plus, Search, MoreHorizontal, Users, GraduationCap, BookOpen } from 'lucide-react';
+import { Trash2, Edit, Plus, Search, MoreHorizontal, Users, GraduationCap } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import InputError from '@/components/input-error';
