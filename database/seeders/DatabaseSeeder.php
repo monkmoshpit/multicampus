@@ -2,12 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\Classroom;
+use App\Models\Course;
+use App\Models\Student;
+use App\Models\Teacher;
 use App\Models\Tenant;
 use App\Models\User;
-use App\Models\Teacher;
-use App\Models\Student;
-use App\Models\Course;
-use App\Models\Classroom;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -46,7 +46,7 @@ class DatabaseSeeder extends Seeder
 
         foreach ($teacherData as $data) {
             $user = User::create([
-                'name' => $data['first_name'] . ' ' . $data['last_name'],
+                'name' => $data['first_name'].' '.$data['last_name'],
                 'email' => $data['email'],
                 'password' => Hash::make('password'),
                 'tenant_id' => $tenant->id,
@@ -100,7 +100,7 @@ class DatabaseSeeder extends Seeder
 
         foreach ($studentData as $i => $data) {
             $user = User::create([
-                'name' => $data['first_name'] . ' ' . $data['last_name'],
+                'name' => $data['first_name'].' '.$data['last_name'],
                 'email' => $data['email'],
                 'password' => Hash::make('password'),
                 'tenant_id' => $tenant->id,
