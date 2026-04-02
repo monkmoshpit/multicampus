@@ -14,9 +14,10 @@ export default function Welcome() {
 
     // Scroll Reveal Intersection Observer
     useEffect(() => {
+        const isMobile = window.innerWidth < 768;
         const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
+            threshold: isMobile ? 0.05 : 0.1,
+            rootMargin: isMobile ? '0px 0px -20px 0px' : '0px 0px -100px 0px'
         };
 
         const observer = new IntersectionObserver((entries) => {
@@ -55,11 +56,11 @@ export default function Welcome() {
             <div className="relative z-10 flex min-h-screen flex-col items-center text-foreground">
                 <header className="fixed top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-md px-6 py-4">
                     <nav className="mx-auto flex max-w-7xl items-center justify-between">
-                        <Link href={auth.user ? dashboard().url : "/"} className="flex items-center gap-3 outline-none group">
-                            <div className="flex h-10 w-10 items-center justify-center bg-gradient-to-br from-green-600 to-emerald-600 text-white shadow-sm ring-1 ring-white/20 transition-transform group-hover:bg-muted/50">
-                                <AppLogoIcon className="size-6 fill-white" />
+                        <Link href={auth.user ? dashboard().url : "/"} className="flex items-center gap-2 sm:gap-3 outline-none group">
+                            <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center bg-gradient-to-br from-green-600 to-emerald-600 text-white shadow-sm ring-1 ring-white/20 transition-transform group-hover:bg-muted/50">
+                                <AppLogoIcon className="size-5 sm:size-6 fill-white" />
                             </div>
-                            <span className="text-2xl font-semibold tracking-tighter uppercase italic">MultiCampus</span>
+                            <span className="text-lg sm:text-2xl font-semibold tracking-tighter uppercase italic">MultiCampus</span>
                         </Link>
 
                         <div className="flex items-center gap-2 sm:gap-6">
@@ -101,39 +102,39 @@ export default function Welcome() {
 
                 <main className="mt-24 flex w-full flex-col items-center">
                     {/* Hero Section */}
-                    <section className="relative w-full px-6 py-24 text-center lg:py-40">
+                    <section className="relative w-full px-6 py-16 text-center lg:py-40">
                         <div className="absolute inset-0 -top-20 z-0 overflow-hidden pointer-events-none">
-                            <div className="absolute left-1/2 top-0 h-[600px] w-[1000px] -translate-x-1/2 rounded-full bg-green-500/5 blur-[120px]"></div>
+                            <div className="absolute left-1/2 top-0 h-[400px] w-full sm:h-[600px] sm:w-[1000px] -translate-x-1/2 rounded-full bg-green-500/5 blur-[80px] sm:blur-[120px]"></div>
                         </div>
 
-                        <div className="relative z-10 space-y-8 max-w-6xl mx-auto">
-                            <div className="reveal inline-flex items-center rounded-full border border-green-200/50 bg-green-50/50 px-5 py-2 text-xs font-bold uppercase tracking-[0.2em] text-green-700 dark:border-green-800/50 dark:bg-green-900/30 dark:text-green-400">
-                                <span className="mr-2 flex h-2 w-2 animate-ping rounded-full bg-green-600"></span>
+                        <div className="relative z-10 space-y-6 sm:space-y-8 max-w-6xl mx-auto">
+                            <div className="reveal inline-flex items-center rounded-full border border-green-200/50 bg-green-50/50 px-4 py-1.5 sm:px-5 sm:py-2 text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] text-green-700 dark:border-green-800/50 dark:bg-green-900/30 dark:text-green-400">
+                                <span className="mr-2 flex h-1.5 w-1.5 sm:h-2 sm:w-2 animate-ping rounded-full bg-green-600"></span>
                                 {t('hero_tagline')}
                             </div>
 
-                            <h1 className="reveal reveal-delay-1 text-5xl font-semibold leading-[1] tracking-tight sm:text-7xl uppercase">
+                            <h1 className="reveal reveal-delay-1 text-4xl font-semibold leading-[1.1] tracking-tight sm:text-7xl uppercase">
                                 {t('hero_title').split('.')[0]} <br className="hidden sm:block" />
                                 <span className="text-primary italic">
                                     {t('hero_title').split('.')[1] || ''}.
                                 </span>
                             </h1>
 
-                            <p className="reveal reveal-delay-2 mx-auto max-w-2xl text-xl font-medium leading-relaxed text-muted-foreground sm:text-2xl">
+                            <p className="reveal reveal-delay-2 mx-auto max-w-2xl text-lg font-medium leading-relaxed text-muted-foreground sm:text-2xl">
                                 {t('hero_subtitle')}
                             </p>
 
-                            <div className="reveal reveal-delay-3 flex flex-col justify-center gap-4 sm:flex-row pt-4">
+                            <div className="reveal reveal-delay-3 flex flex-col items-stretch justify-center gap-4 sm:flex-row pt-4 px-4 sm:px-0">
                                 <Link
                                     href={register().url + "?role=tenant"}
-                                    className="group flex items-center justify-center gap-3 rounded-full bg-green-600 px-12 py-6 text-xl font-semibold text-white shadow-sm shadow-green-500/30 transition-all hover:bg-muted/50 hover:bg-green-700"
+                                    className="group flex items-center justify-center gap-3 rounded-full bg-green-600 px-8 py-5 sm:px-12 sm:py-6 text-lg sm:text-xl font-semibold text-white shadow-sm shadow-green-500/30 transition-all hover:bg-green-700/90 active:scale-[0.98]"
                                 >
                                     {t('deploy_institution')}
-                                    <ArrowRight className="h-6 w-6 transition-transform group-hover:translate-x-2" />
+                                    <ArrowRight className="h-5 w-5 sm:h-6 sm:w-6 transition-transform group-hover:translate-x-2" />
                                 </Link>
                                 <button
                                     onClick={() => document.getElementById('personas')?.scrollIntoView({ behavior: 'smooth' })}
-                                    className="flex items-center justify-center gap-3 rounded-full bg-card px-12 py-6 text-xl font-bold text-foreground shadow-sm ring-1 ring-border transition-all hover:bg-muted"
+                                    className="flex items-center justify-center gap-3 rounded-full bg-card px-8 py-5 sm:px-12 sm:py-6 text-lg sm:text-xl font-bold text-foreground shadow-sm ring-1 ring-border transition-all hover:bg-muted active:scale-[0.98]"
                                 >
                                     {t('explore_personas')}
                                 </button>
@@ -142,10 +143,10 @@ export default function Welcome() {
                     </section>
 
                     {/* Persona Detailed Sections */}
-                    <section id="personas" className="w-full max-w-7xl px-6 py-32">
-                        <div className="reveal mb-20 text-center space-y-3">
-                            <h2 className="text-4xl font-semibold tracking-tight sm:text-5xl uppercase italic">{t('tailored_perspectives')}</h2>
-                            <p className="text-lg text-muted-foreground font-medium">{t('perspectives_subtitle')}</p>
+                    <section id="personas" className="w-full max-w-7xl px-6 py-20 sm:py-32">
+                        <div className="reveal mb-12 sm:mb-20 text-center space-y-2 sm:space-y-3">
+                            <h2 className="text-2xl sm:text-5xl font-semibold tracking-tight uppercase italic">{t('tailored_perspectives')}</h2>
+                            <p className="text-base sm:text-lg text-muted-foreground font-medium">{t('perspectives_subtitle')}</p>
                         </div>
 
                         <div className="grid gap-10 lg:grid-cols-3">
@@ -181,21 +182,21 @@ export default function Welcome() {
                             </div>
 
                             {/* Student Persona */}
-                            <div className="reveal reveal-delay-2 group flex flex-col rounded-[2.5rem] border border-orange-100/50 bg-orange-50/20 p-10 transition-all hover:border-orange-500/40 hover:shadow-[0_20px_60px_-15px_rgba(234,88,12,0.15)] dark:border-orange-900/20 dark:bg-orange-950/10">
-                                <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-[1.25rem] bg-orange-600 text-white shadow-sm group-hover:bg-muted/50 group-hover:-rotate-3 transition-transform duration-500">
-                                    <Users className="h-8 w-8" />
+                            <div className="reveal reveal-delay-1 sm:reveal-delay-2 group flex flex-col rounded-[2rem] sm:rounded-[2.5rem] border border-orange-100/50 bg-orange-50/20 p-8 sm:p-10 transition-all hover:border-orange-500/40 hover:shadow-[0_20px_60px_-15px_rgba(234,88,12,0.15)] dark:border-orange-900/20 dark:bg-orange-950/10">
+                                <div className="mb-6 sm:mb-8 flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-[1rem] sm:rounded-[1.25rem] bg-orange-600 text-white shadow-sm group-hover:bg-muted/50 group-hover:-rotate-3 transition-transform duration-500">
+                                    <Users className="h-7 w-7 sm:h-8 sm:w-8" />
                                 </div>
-                                <h3 className="mb-4 text-3xl font-semibold leading-none uppercase italic">{t('students_title')}</h3>
-                                <p className="mb-8 text-base font-medium text-muted-foreground leading-relaxed">
+                                <h3 className="mb-4 text-2xl sm:text-3xl font-semibold leading-none uppercase italic">{t('students_title')}</h3>
+                                <p className="mb-6 sm:mb-8 text-sm sm:text-base font-medium text-muted-foreground leading-relaxed">
                                     {t('students_desc')}
                                 </p>
-                                <ul className="mb-10 flex-1 space-y-4">
+                                <ul className="mb-8 sm:mb-10 flex-1 space-y-3 sm:space-y-4">
                                     {[
                                         'feat_roadmap',
                                         'feat_metrics',
                                         'feat_enrollment',
                                     ].map((key) => (
-                                        <li key={key} className="flex items-center gap-3 font-bold text-foreground/80 text-sm">
+                                        <li key={key} className="flex items-center gap-3 font-bold text-foreground/80 text-xs sm:text-sm">
                                             <div className="flex h-5 w-5 items-center justify-center rounded-full bg-orange-600/10">
                                                 <CheckCircle2 className="h-3 w-3 text-orange-600" />
                                             </div>
@@ -205,7 +206,7 @@ export default function Welcome() {
                                 </ul>
                                 <Link
                                     href={login().url + "?role=student"}
-                                    className="flex items-center justify-center bg-orange-600 py-4 font-semibold text-white transition-all shadow-sm shadow-orange-600/20 hover:bg-orange-700 hover:bg-muted/50"
+                                    className="flex items-center justify-center bg-orange-600 py-3.5 sm:py-4 font-semibold text-white transition-all shadow-sm shadow-orange-600/20 hover:bg-orange-700 active:scale-[0.98]"
                                 >
                                     {t('access_student_portal')}
                                 </Link>
@@ -252,10 +253,10 @@ export default function Welcome() {
                                 <p className="mx-auto max-w-2xl text-lg text-muted-foreground font-medium">{t('technical_supremacy_desc')}</p>
                             </div>
 
-                            <div className="flex overflow-x-auto pb-12 pt-4 hide-scrollbar snap-x snap-mandatory gap-8 justify-center">
-                                <div className="reveal reveal-delay-1 w-[240px] shrink-0 snap-center sm:w-[320px]">
-                                    <div className="group h-full rounded-[2rem] border border-border bg-card p-6 shadow-sm transition-all hover:-translate-y-2 hover:shadow-sm hover:border-green-500/20 text-center flex flex-col items-center">
-                                        <div className="mb-5 flex h-12 w-12 items-center justify-center bg-green-600/10 text-green-600 shadow-inner group-hover:bg-muted/50 transition-transform">
+                            <div className="flex overflow-x-auto pb-12 pt-4 hide-scrollbar snap-x snap-mandatory gap-6 sm:gap-8 justify-start lg:justify-center px-4 sm:px-0">
+                                <div className="reveal reveal-delay-1 w-[280px] shrink-0 snap-center sm:w-[320px]">
+                                    <div className="group h-full rounded-[2rem] border border-border bg-card p-6 sm:p-8 shadow-sm transition-all hover:-translate-y-2 hover:shadow-md hover:border-green-500/20 text-center flex flex-col items-center">
+                                        <div className="mb-5 flex h-12 w-12 items-center justify-center bg-green-600/10 text-green-600 shadow-inner group-hover:bg-green-600/20 transition-colors">
                                             <ShieldCheck className="h-6 w-6" />
                                         </div>
                                         <h3 className="mb-3 text-lg font-semibold text-foreground uppercase italic leading-none">{t('total_isolation')}</h3>
@@ -263,9 +264,9 @@ export default function Welcome() {
                                     </div>
                                 </div>
 
-                                <div className="reveal reveal-delay-2 w-[240px] shrink-0 snap-center sm:w-[320px]">
-                                    <div className="group h-full rounded-[2rem] border border-border bg-card p-6 shadow-sm transition-all hover:-translate-y-2 hover:shadow-sm hover:border-orange-500/20 text-center flex flex-col items-center">
-                                        <div className="mb-5 flex h-12 w-12 items-center justify-center bg-orange-600/10 text-orange-600 shadow-inner group-hover:bg-muted/50 transition-transform">
+                                <div className="reveal reveal-delay-1 sm:reveal-delay-2 w-[280px] shrink-0 snap-center sm:w-[320px]">
+                                    <div className="group h-full rounded-[2rem] border border-border bg-card p-6 sm:p-8 shadow-sm transition-all hover:-translate-y-2 hover:shadow-md hover:border-orange-500/20 text-center flex flex-col items-center">
+                                        <div className="mb-5 flex h-12 w-12 items-center justify-center bg-orange-600/10 text-orange-600 shadow-inner group-hover:bg-orange-600/20 transition-colors">
                                             <Zap className="h-6 w-6" />
                                         </div>
                                         <h3 className="mb-3 text-lg font-semibold text-foreground uppercase italic leading-none">{t('instant_flux')}</h3>
@@ -273,9 +274,9 @@ export default function Welcome() {
                                     </div>
                                 </div>
 
-                                <div className="reveal reveal-delay-3 w-[240px] shrink-0 snap-center sm:w-[320px]">
-                                    <div className="group h-full rounded-[2rem] border border-border bg-card p-6 shadow-sm transition-all hover:-translate-y-2 hover:shadow-sm hover:border-blue-500/20 text-center flex flex-col items-center">
-                                        <div className="mb-5 flex h-12 w-12 items-center justify-center bg-blue-600/10 text-blue-600 shadow-inner group-hover:bg-muted/50 transition-transform">
+                                <div className="reveal reveal-delay-1 sm:reveal-delay-3 w-[280px] shrink-0 snap-center sm:w-[320px]">
+                                    <div className="group h-full rounded-[2rem] border border-border bg-card p-6 sm:p-8 shadow-sm transition-all hover:-translate-y-2 hover:shadow-md hover:border-blue-500/20 text-center flex flex-col items-center">
+                                        <div className="mb-5 flex h-12 w-12 items-center justify-center bg-blue-600/10 text-blue-600 shadow-inner group-hover:bg-blue-600/20 transition-colors">
                                             <Laptop className="h-6 w-6" />
                                         </div>
                                         <h3 className="mb-3 text-lg font-semibold text-foreground uppercase italic leading-none">{t('unified_core')}</h3>
@@ -287,14 +288,14 @@ export default function Welcome() {
                     </div>
 
                     {/* Final CTA */}
-                    <section className="reveal w-full max-w-6xl mx-auto px-6 py-40 text-center">
-                        <div className="rounded-[4rem] bg-foreground text-background p-16 sm:p-24 shadow-sm relative overflow-hidden group">
+                    <section className="reveal w-full max-w-6xl mx-auto px-4 sm:px-6 py-24 sm:py-40 text-center">
+                        <div className="rounded-[2.5rem] sm:rounded-[4rem] bg-foreground text-background p-8 sm:p-24 shadow-sm relative overflow-hidden group">
                             <div className="absolute inset-0 bg-gradient-to-br from-green-600/20 to-blue-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
-                            <div className="relative z-10 space-y-10">
-                                <h2 className="text-6xl font-semibold tracking-tight sm:text-8xl uppercase italic">{t('ready_to_evolve')}</h2>
-                                <p className="text-xl font-medium sm:text-2xl text-background/70 max-w-3xl mx-auto italic">{t('ready_to_evolve_desc')}</p>
-                                <div className="flex flex-col sm:flex-row justify-center gap-6 pt-6">
-                                    <Link href={login().url} className="bg-background text-foreground px-12 py-6 rounded-full font-semibold text-2xl transition-all hover:bg-muted/50 hover:shadow-[0_0_50px_rgba(255,255,255,0.3)]">
+                            <div className="relative z-10 space-y-6 sm:space-y-10">
+                                <h2 className="text-4xl font-semibold tracking-tight sm:text-8xl uppercase italic">{t('ready_to_evolve')}</h2>
+                                <p className="text-lg font-medium sm:text-2xl text-background/70 max-w-3xl mx-auto italic">{t('ready_to_evolve_desc')}</p>
+                                <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 pt-4 sm:pt-6">
+                                    <Link href={login().url} className="bg-background text-foreground px-8 py-4 sm:px-12 sm:py-6 rounded-full font-semibold text-xl sm:text-2xl transition-all hover:bg-background/90 hover:shadow-[0_0_50px_rgba(255,255,255,0.3)] active:scale-[0.98]">
                                         {t('get_started_now')}
                                     </Link>
                                 </div>

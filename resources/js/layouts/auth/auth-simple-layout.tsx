@@ -114,7 +114,7 @@ function AuthContent({ role, children, onRoleChange, currentRole, isFlooding, sh
             <div className="relative flex flex-1 flex-col items-center justify-center gap-8 bg-background p-6 md:p-12 transition-none">
                 <div className="w-full max-w-sm">
                     {/* Role Switcher Slider */}
-                    <div className="mb-10 flex items-center justify-center p-1 rounded-2xl bg-muted/50 border border-border/50 backdrop-blur-sm shadow-inner overflow-hidden">
+                    <div className="mb-8 sm:mb-10 flex items-center justify-center p-1 rounded-2x border border-border/50 bg-muted/30 backdrop-blur-sm shadow-inner overflow-hidden">
                         {(['teacher', 'student', 'tenant'] as const).map((r) => (
                             <button
                                 key={r}
@@ -123,16 +123,18 @@ function AuthContent({ role, children, onRoleChange, currentRole, isFlooding, sh
                                     e.stopPropagation();
                                     onRoleChange(r);
                                 }}
-                                className={`group relative flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs font-bold transition-all duration-300 ${currentRole === r
-                                        ? `bg-white dark:bg-zinc-800 text-primary shadow-lg ring-1 ring-black/5 dark:ring-white/10 scale-[1.02]`
+                                className={`group relative flex-1 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 py-2 sm:py-3 px-2 sm:px-4 rounded-xl text-[10px] sm:text-xs font-bold transition-all duration-300 ${currentRole === r
+                                        ? `bg-white dark:bg-zinc-800 text-primary shadow-sm ring-1 ring-black/5 dark:ring-white/10 scale-[1.02]`
                                         : 'text-muted-foreground hover:text-foreground'
                                     }`}
                                 disabled={isFlooding}
                             >
-                                {r === 'teacher' && <GraduationCap className={`h-3.5 w-3.5 ${currentRole === r ? 'text-primary' : ''}`} />}
-                                {r === 'student' && <Users className={`h-3.5 w-3.5 ${currentRole === r ? 'text-primary' : ''}`} />}
-                                {r === 'tenant' && <Building className={`h-3.5 w-3.5 ${currentRole === r ? 'text-primary' : ''}`} />}
-                                <span className="uppercase tracking-widest">{t(r)}</span>
+                                {r === 'teacher' && <GraduationCap className={`h-3.5 w-3.5 sm:h-4 sm:w-4 ${currentRole === r ? 'text-primary' : ''}`} />}
+                                {r === 'student' && <Users className={`h-3.5 w-3.5 sm:h-4 sm:w-4 ${currentRole === r ? 'text-primary' : ''}`} />}
+                                {r === 'tenant' && <Building className={`h-3.5 w-3.5 sm:h-4 sm:w-4 ${currentRole === r ? 'text-primary' : ''}`} />}
+                                <span className="uppercase tracking-tighter sm:tracking-widest truncate max-w-[50px] sm:max-w-none text-center">
+                                    {t(r).split(' ')[0]}
+                                </span>
 
                                 {currentRole === r && (
                                     <div className="absolute inset-x-0 bottom-0 h-0.5 bg-primary/20 transition-all duration-300" />
@@ -153,7 +155,7 @@ function AuthContent({ role, children, onRoleChange, currentRole, isFlooding, sh
                         </div>
 
                         {/* Form Container */}
-                        <div className="rounded-3xl border border-border/60 bg-card/50 p-8 shadow-lg backdrop-blur-sm ring-1 ring-black/[0.02]">
+                        <div className="rounded-2xl sm:rounded-3xl border border-border/60 bg-card/50 p-6 sm:p-8 shadow-lg backdrop-blur-sm ring-1 ring-black/[0.02]">
                             {children}
                         </div>
                     </div>
